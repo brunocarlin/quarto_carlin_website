@@ -2,14 +2,14 @@
   {
     "objectID": "about.html",
     "href": "about.html",
-    "title": "About",
+    "title": "About Me",
     "section": "",
-    "text": "This is my third personal website/blog which contains discussions on topics related to Data Science.\nPlease browse around, and feel free to leave a comment."
+    "text": "This is my fourth personal website/blog which contains discussions on topics related to Data Science.\nI think quarto will be the stable home of my site wish me luck.\nPlease browse around, and feel free to leave a comment."
   },
   {
     "objectID": "blog.html",
     "href": "blog.html",
-    "title": "My posts",
+    "title": "Blog",
     "section": "",
     "text": "Order By\n       Default\n         \n          Title\n        \n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n  \n\n\n\n\n\n\n\n\n\n\ntidymodels\n\n\ntensorflow\n\n\ncode\n\n\n \n\n\n\n\n5 min\n\n\n\n\n\n\n  \n\n\n\n\n\n\n\n\n\n\ntidymodels\n\n\ncode\n\n\npackage\n\n\n \n\n\n\n\n1 min\n\n\n\n\n\n\nNo matching items"
   },
@@ -116,7 +116,7 @@
     "href": "posts/new/autoencoder/index.html#discover-the-threshold-to-flag-annomalies",
     "title": "Functional Auto Encoder with R Keras",
     "section": "Discover the threshold to flag annomalies",
-    "text": "Discover the threshold to flag annomalies\n\nCodereconstructions <-  autoencoder |> predict(normal_train_data_x) |> as_tibble()\ntrain_data_tibble <- normal_train_data_x |> as_tibble()\n\n\ntrain_loss = loss_mean_squared_error(reconstructions, train_data_tibble)\n\ndata_loss <- train_loss |> as.numeric() |> as_tibble()\n\ndata_loss |> \n  ggplot(aes(x = value)) +\n  geom_histogram(bins = 50) +\n  labs(title = 'Loss Normal Train Data',x = 'Train Loss', y = 'No of examples') +\n  theme_minimal()\n\n\n\n\n\nCodethreshold <-mean(train_loss) + sd(train_loss)\n\nprint(threshold |> as.numeric())\n\n[1] 0.0122588\n\n\n\n\n\n\n\n\nCompletness\n\n\n\nThere are other strategies you could use to select a threshold value above which test examples should be classified as anomalous, the correct approach will depend on your dataset. You can learn more with the links at the end of this tutorial.\n\n\n\n\n\n\n\n\nStrategy\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nIf you examine the reconstruction error for the anomalous examples in the test set, you’ll notice most have greater reconstruction error than the threshold. By varing the threshold, you can adjust the precision and recall of your classifier.\n\n\n\n\n\n\n\n\n\n\ntidy.outliers\n\n\n\nIf you need something faster, and usually more practical do check out my package tidy.outliers for easy to use outlier detection methods.\n\n\n\nCodereconstructions <-  autoencoder |> predict(anomalous_test_data_x) |> as_tibble()\n\nanomalous_test_data_x_tibble <- anomalous_test_data_x |> as_tibble()\n\ntest_loss = loss_mean_squared_error(reconstructions, anomalous_test_data_x_tibble)\n\ndata_loss <- test_loss |> as.numeric() |> as_tibble()\n\ndata_loss |> \n  ggplot(aes(x = value)) +\n  geom_histogram(bins = 50) +\n  labs(title = 'Loss Anomalous Test Data',x = 'Test Loss', y = 'No of examples') +\n  theme_minimal()"
+    "text": "Discover the threshold to flag annomalies\n\nCodereconstructions <-  autoencoder |> predict(normal_train_data_x) |> as_tibble()\ntrain_data_tibble <- normal_train_data_x |> as_tibble()\n\n\ntrain_loss = loss_mean_squared_error(reconstructions, train_data_tibble)\n\ndata_loss <- train_loss |> as.numeric() |> as_tibble()\n\ndata_loss |> \n  ggplot(aes(x = value)) +\n  geom_histogram(bins = 50) +\n  labs(title = 'Loss Normal Train Data',x = 'Train Loss', y = 'No of examples') +\n  theme_minimal()\n\n\n\n\n\nCodethreshold <-mean(train_loss) + sd(train_loss)\n\nprint(threshold |> as.numeric())\n\n[1] 0.01230075\n\n\n\n\n\n\n\n\nCompletness\n\n\n\nThere are other strategies you could use to select a threshold value above which test examples should be classified as anomalous, the correct approach will depend on your dataset. You can learn more with the links at the end of this tutorial.\n\n\n\n\n\n\n\n\nStrategy\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nIf you examine the reconstruction error for the anomalous examples in the test set, you’ll notice most have greater reconstruction error than the threshold. By varing the threshold, you can adjust the precision and recall of your classifier.\n\n\n\n\n\n\n\n\n\n\ntidy.outliers\n\n\n\nIf you need something faster, and usually more practical do check out my package tidy.outliers for easy to use outlier detection methods.\n\n\n\nCodereconstructions <-  autoencoder |> predict(anomalous_test_data_x) |> as_tibble()\n\nanomalous_test_data_x_tibble <- anomalous_test_data_x |> as_tibble()\n\ntest_loss = loss_mean_squared_error(reconstructions, anomalous_test_data_x_tibble)\n\ndata_loss <- test_loss |> as.numeric() |> as_tibble()\n\ndata_loss |> \n  ggplot(aes(x = value)) +\n  geom_histogram(bins = 50) +\n  labs(title = 'Loss Anomalous Test Data',x = 'Test Loss', y = 'No of examples') +\n  theme_minimal()"
   },
   {
     "objectID": "posts/new/autoencoder/index.html#classify-anomalies",

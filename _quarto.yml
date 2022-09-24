@@ -14,13 +14,22 @@ website:
       - href: blog.qmd
     right:
       - icon: github
-        href: https://github.com/
+        href: https://github.com/brunocarlin/quarto_carlin_website
         aria-label: GitHub
+      - icon: linkedin
+        href: https://www.linkedin.com/in/bruno-carlin/
+        aria-label: LinkedIn
+      - icon: twitter
+        href: https://twitter.com/BrunoTestaguzza
   page-footer:
     right: "This blog is built with ❤️ and [Quarto](https://quarto.org/)."
   google-analytics: "G-V18SLYYHQJ"
   site-url: https://carlin.quarto.pub/bruno-testaguzza-carlin
+  comments:
+    giscus: 
+      repo: brunocarlin/quarto_carlin_website
   description: "The Site of Bruno Testaguzza Carlin"
+  
 
 format:
   html:
@@ -29,7 +38,7 @@ format:
       light: [flatly]
       dark: [darkly]
     
-    mainfont: "Atkinson Hyperlegible"
+
     code-copy: true
     code-overflow: wrap
     toc: true

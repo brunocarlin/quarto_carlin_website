@@ -1,5 +1,5 @@
 ---
-title: "My posts"
+title: "Blog"
 listing:
   contents: posts
   sort: "date desc"
@@ -9,7 +9,9 @@ listing:
   filter-ui: true
   max-items: 5
   image-align: 'right'
-  feed: true
+  feed: 
+    categories: 
+      - R
   fields: [image,date,categories,title,reading-time]
 page-layout: full
 title-block-banner: true
