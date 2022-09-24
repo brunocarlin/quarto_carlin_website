@@ -10,7 +10,7 @@
 <atom:link href="https://carlin.quarto.pub/bruno-testaguzza-carlin/blog.xml" rel="self" type="application/rss+xml"/>
 <description>The Site of Bruno Testaguzza Carlin</description>
 <generator>quarto-1.1.168</generator>
-<lastBuildDate>Sat, 24 Sep 2022 22:10:48 GMT</lastBuildDate>
+<lastBuildDate>Sat, 24 Sep 2022 22:36:37 GMT</lastBuildDate>
 <item>
   <title>Functional Auto Encoder with R Keras</title>
   <dc:creator>Bruno Testaguzza Carlin</dc:creator>
@@ -359,7 +359,7 @@ Call `lifecycle::last_lifecycle_warnings()` to see where this warning was genera
 <span></span>
 <span><span class="fu" style="color: #4758AB;"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;">threshold</span> <span class="op" style="color: #5E5E5E;">|&gt;</span> <span class="fu" style="color: #4758AB;"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="op" style="color: #5E5E5E;">)</span><span class="op" style="color: #5E5E5E;">)</span></span></code></pre></div>
 </details><div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.0122588</code></pre>
+<pre><code>[1] 0.01230075</code></pre>
 </div>
 </div>
 <div class="callout-note callout callout-style-default callout-captioned">
@@ -495,7 +495,7 @@ tidy.outliers
   <category>tensorflow</category>
   <category>code</category>
   <guid>https://carlin.quarto.pub/bruno-testaguzza-carlin/posts/new/autoencoder/index.html</guid>
-  <pubDate>Sat, 24 Sep 2022 22:10:48 GMT</pubDate>
+  <pubDate>Sat, 24 Sep 2022 22:36:37 GMT</pubDate>
   <media:content url="https://carlin.quarto.pub/bruno-testaguzza-carlin/posts/new/autoencoder/autoencoder.png" medium="image" type="image/png" height="101" width="144"/>
 </item>
 <item>
@@ -544,7 +544,7 @@ tidy.outliers
   <category>code</category>
   <category>package</category>
   <guid>https://carlin.quarto.pub/bruno-testaguzza-carlin/posts/old/index.html</guid>
-  <pubDate>Sat, 24 Sep 2022 22:10:48 GMT</pubDate>
+  <pubDate>Sat, 24 Sep 2022 22:36:37 GMT</pubDate>
   <media:content url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDvE-FcZtiyIvEPBjf_UGXqeEOXh-iVx2K3g&amp;usqp=CAU" medium="image"/>
 </item>
 </channel>
