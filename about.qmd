@@ -1,0 +1,9 @@
+---
+title: "About"
+---
+
+Hi - I\'m **Bruno Testaguzza Carlin**. I currently wort at Recovery as a Data Science Specialist.
+
+This is my third personal website/blog which contains discussions on topics related to Data Science.
+
+Please browse around, and feel free to leave a comment.

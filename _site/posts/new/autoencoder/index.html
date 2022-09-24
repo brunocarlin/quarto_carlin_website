@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.168">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta name="author" content="Bruno Testaguzza Carlin">
+<title>Bruno Testaguzza Carlin - Functional Auto Encoder with R Keras</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark"><script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script><script async="" src="https://www.googletagmanager.com/gtag/js?id=G-V18SLYYHQJ"></script><script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-V18SLYYHQJ', { 'anonymize_ip': true});
+</script><link href="../../../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="../../../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<meta property="og:title" content="Bruno Testaguzza Carlin - Functional Auto Encoder with R Keras">
+<meta property="og:description" content="This is a somewhat simple post trying to mimic the guides on auto encoders present in Third example: Anomaly detection">
+<meta property="og:image" content="https://carlin.quarto.pub/bruno-testaguzza-carlin/posts\new\autoencoder\autoencoder.png">
+<meta property="og:site-name" content="Bruno Testaguzza Carlin">
+<meta property="og:image:height" content="1364">
+<meta property="og:image:width" content="1950">
+<meta name="twitter:title" content="Bruno Testaguzza Carlin - Functional Auto Encoder with R Keras">
+<meta name="twitter:description" content="This is a somewhat simple post trying to mimic the guides on auto encoders present in Third example: Anomaly detection">
+<meta name="twitter:image" content="https://carlin.quarto.pub/bruno-testaguzza-carlin/posts\new\autoencoder\autoencoder.png">
+<meta name="twitter:creator" content="@BrunoTestaguzza">
+<meta name="twitter:image-height" content="1364">
+<meta name="twitter:image-width" content="1950">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg navbar-dark "><div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Bruno Testaguzza Carlin</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+<li class="nav-item">
+    <a class="nav-link" href="../../../index.html">Welcome to my site</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../about.html">About</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../blog.html">My posts</a>
+  </li>  
+</ul>
+<div class="quarto-toggle-container">
+                  <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+              </div>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">On this page</h2>
+   
+  <ul>
+<li><a href="#objective" id="toc-objective" class="nav-link active" data-scroll-target="#objective">Objective</a></li>
+  <li><a href="#libraries" id="toc-libraries" class="nav-link" data-scroll-target="#libraries">Libraries</a></li>
+  <li><a href="#download-the-dataset" id="toc-download-the-dataset" class="nav-link" data-scroll-target="#download-the-dataset">Download The Dataset</a></li>
+  <li>
+<a href="#preprocessing" id="toc-preprocessing" class="nav-link" data-scroll-target="#preprocessing">Preprocessing</a>
+  <ul class="collapse">
+<li><a href="#split-the-data" id="toc-split-the-data" class="nav-link" data-scroll-target="#split-the-data">Split the data</a></li>
+  <li><a href="#normalize-the-data-to-01." id="toc-normalize-the-data-to-01." class="nav-link" data-scroll-target="#normalize-the-data-to-01.">Normalize the data to [0,1].</a></li>
+  <li><a href="#separate-datasets-for-future-usage" id="toc-separate-datasets-for-future-usage" class="nav-link" data-scroll-target="#separate-datasets-for-future-usage">Separate datasets for future usage</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#see-the-data" id="toc-see-the-data" class="nav-link" data-scroll-target="#see-the-data">See the data</a>
+  <ul class="collapse">
+<li><a href="#normal-ecg" id="toc-normal-ecg" class="nav-link" data-scroll-target="#normal-ecg">Normal ECG</a></li>
+  <li><a href="#anomalous-ecg" id="toc-anomalous-ecg" class="nav-link" data-scroll-target="#anomalous-ecg">Anomalous ECG</a></li>
+  </ul>
+</li>
+  <li><a href="#create-matrixes-for-tensorflow" id="toc-create-matrixes-for-tensorflow" class="nav-link" data-scroll-target="#create-matrixes-for-tensorflow">Create Matrixes for tensorflow</a></li>
+  <li>
+<a href="#build-the-auto-encoder--using-the-functional-api" id="toc-build-the-auto-encoder--using-the-functional-api" class="nav-link" data-scroll-target="#build-the-auto-encoder--using-the-functional-api">Build The Auto Encoder- Using the functional api</a>
+  <ul class="collapse">
+<li><a href="#discover-the-input-and-output-dimensions" id="toc-discover-the-input-and-output-dimensions" class="nav-link" data-scroll-target="#discover-the-input-and-output-dimensions">Discover the input and output dimensions</a></li>
+  <li><a href="#define-the-encoder" id="toc-define-the-encoder" class="nav-link" data-scroll-target="#define-the-encoder">Define the encoder</a></li>
+  <li><a href="#define-decoder" id="toc-define-decoder" class="nav-link" data-scroll-target="#define-decoder">Define Decoder</a></li>
+  <li><a href="#define-the-auto-encoder" id="toc-define-the-auto-encoder" class="nav-link" data-scroll-target="#define-the-auto-encoder">Define The Auto Encoder</a></li>
+  <li><a href="#fit-the-model" id="toc-fit-the-model" class="nav-link" data-scroll-target="#fit-the-model">Fit the model</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#plot-the-predictions" id="toc-plot-the-predictions" class="nav-link" data-scroll-target="#plot-the-predictions">Plot the predictions</a>
+  <ul class="collapse">
+<li><a href="#reconstruction-on-normal-data" id="toc-reconstruction-on-normal-data" class="nav-link" data-scroll-target="#reconstruction-on-normal-data">Reconstruction on Normal data</a></li>
+  <li><a href="#reconstruction-on-anomalous-data" id="toc-reconstruction-on-anomalous-data" class="nav-link" data-scroll-target="#reconstruction-on-anomalous-data">Reconstruction on Anomalous data</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#detect-anomalies" id="toc-detect-anomalies" class="nav-link" data-scroll-target="#detect-anomalies">Detect anomalies</a>
+  <ul class="collapse">
+<li><a href="#discover-the-threshold-to-flag-annomalies" id="toc-discover-the-threshold-to-flag-annomalies" class="nav-link" data-scroll-target="#discover-the-threshold-to-flag-annomalies">Discover the threshold to flag annomalies</a></li>
+  <li><a href="#classify-anomalies" id="toc-classify-anomalies" class="nav-link" data-scroll-target="#classify-anomalies">Classify anomalies</a></li>
+  </ul>
+</li>
+  <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps">Next Steps</a></li>
+  </ul></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Functional Auto Encoder with R Keras</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+  <div class="quarto-categories">
+    <div class="quarto-category">tidymodels</div>
+    <div class="quarto-category">tensorflow</div>
+    <div class="quarto-category">code</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Bruno Testaguzza Carlin </p>
+          </div>
+  </div>
+    
+    
+  </div>
+  
+
+</header><section id="objective" class="level1"><h1>Objective</h1>
+<p>This is a somewhat simple post trying to mimic the guides on auto encoders present in <a href="https://www.tensorflow.org/tutorials/generative/autoencoder#third_example_anomaly_detection" title="Third example: Anomaly detection">Third example: Anomaly detection</a></p>
+</section><section id="libraries" class="level1"><h1>Libraries</h1>
+<p>Do keep in mind that in order to use tensorflow you should run</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">tensorflow</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tensorflow/man/install_tensorflow.html">install_tensorflow</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<details open=""><summary>Code</summary><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://keras.rstudio.com">keras</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rsample.tidymodels.org">rsample</a></span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressMessages</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/recipes">recipes</a></span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressMessages</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org">tidyr</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section><section id="download-the-dataset" class="level1"><h1>Download The Dataset</h1>
+<div class="cell">
+<details open=""><summary>Code</summary><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dataframe</span> <span class="op">&lt;-</span>  <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">'http://storage.googleapis.com/download.tensorflow.org/data/ecg.csv'</span>,col_names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stderr">
+<pre><code>Rows: 4998 Columns: 141
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+dbl (141): X1, X2, X3, X4, X5, X6, X7, X8, X9, X10, X11, X12, X13, X14, X15,...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<details open=""><summary>Code</summary><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dataframe</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["X1"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["X2"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["X3"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["X4"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["X5"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["X6"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["X7"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["X8"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["X9"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["X10"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["X11"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["X12"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["X13"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["X14"],"name":[14],"type":["dbl"],"align":["right"]},{"label":["X15"],"name":[15],"type":["dbl"],"align":["right"]},{"label":["X16"],"name":[16],"type":["dbl"],"align":["right"]},{"label":["X17"],"name":[17],"type":["dbl"],"align":["right"]},{"label":["X18"],"name":[18],"type":["dbl"],"align":["right"]},{"label":["X19"],"name":[19],"type":["dbl"],"align":["right"]},{"label":["X20"],"name":[20],"type":["dbl"],"align":["right"]},{"label":["X21"],"name":[21],"type":["dbl"],"align":["right"]},{"label":["X22"],"name":[22],"type":["dbl"],"align":["right"]},{"label":["X23"],"name":[23],"type":["dbl"],"align":["right"]},{"label":["X24"],"name":[24],"type":["dbl"],"align":["right"]},{"label":["X25"],"name":[25],"type":["dbl"],"align":["right"]},{"label":["X26"],"name":[26],"type":["dbl"],"align":["right"]},{"label":["X27"],"name":[27],"type":["dbl"],"align":["right"]},{"label":["X28"],"name":[28],"type":["dbl"],"align":["right"]},{"label":["X29"],"name":[29],"type":["dbl"],"align":["right"]},{"label":["X30"],"name":[30],"type":["dbl"],"align":["right"]},{"label":["X31"],"name":[31],"type":["dbl"],"align":["right"]},{"label":["X32"],"name":[32],"type":["dbl"],"align":["right"]},{"label":["X33"],"name":[33],"type":["dbl"],"align":["right"]},{"label":["X34"],"name":[34],"type":["dbl"],"align":["right"]},{"label":["X35"],"name":[35],"type":["dbl"],"align":["right"]},{"label":["X36"],"name":[36],"type":["dbl"],"align":["right"]},{"label":["X37"],"name":[37],"type":["dbl"],"align":["right"]},{"label":["X38"],"name":[38],"type":["dbl"],"align":["right"]},{"label":["X39"],"name":[39],"type":["dbl"],"align":["right"]},{"label":["X40"],"name":[40],"type":["dbl"],"align":["right"]},{"label":["X41"],"name":[41],"type":["dbl"],"align":["right"]},{"label":["X42"],"name":[42],"type":["dbl"],"align":["right"]},{"label":["X43"],"name":[43],"type":["dbl"],"align":["right"]},{"label":["X44"],"name":[44],"type":["dbl"],"align":["right"]},{"label":["X45"],"name":[45],"type":["dbl"],"align":["right"]},{"label":["X46"],"name":[46],"type":["dbl"],"align":["right"]},{"label":["X47"],"name":[47],"type":["dbl"],"align":["right"]},{"label":["X48"],"name":[48],"type":["dbl"],"align":["right"]},{"label":["X49"],"name":[49],"type":["dbl"],"align":["right"]},{"label":["X50"],"name":[50],"type":["dbl"],"align":["right"]},{"label":["X51"],"name":[51],"type":["dbl"],"align":["right"]},{"label":["X52"],"name":[52],"type":["dbl"],"align":["right"]},{"label":["X53"],"name":[53],"type":["dbl"],"align":["right"]},{"label":["X54"],"name":[54],"type":["dbl"],"align":["right"]},{"label":["X55"],"name":[55],"type":["dbl"],"align":["right"]},{"label":["X56"],"name":[56],"type":["dbl"],"align":["right"]},{"label":["X57"],"name":[57],"type":["dbl"],"align":["right"]},{"label":["X58"],"name":[58],"type":["dbl"],"align":["right"]},{"label":["X59"],"name":[59],"type":["dbl"],"align":["right"]},{"label":["X60"],"name":[60],"type":["dbl"],"align":["right"]},{"label":["X61"],"name":[61],"type":["dbl"],"align":["right"]},{"label":["X62"],"name":[62],"type":["dbl"],"align":["right"]},{"label":["X63"],"name":[63],"type":["dbl"],"align":["right"]},{"label":["X64"],"name":[64],"type":["dbl"],"align":["right"]},{"label":["X65"],"name":[65],"type":["dbl"],"align":["right"]},{"label":["X66"],"name":[66],"type":["dbl"],"align":["right"]},{"label":["X67"],"name":[67],"type":["dbl"],"align":["right"]},{"label":["X68"],"name":[68],"type":["dbl"],"align":["right"]},{"label":["X69"],"name":[69],"type":["dbl"],"align":["right"]},{"label":["X70"],"name":[70],"type":["dbl"],"align":["right"]},{"label":["X71"],"name":[71],"type":["dbl"],"align":["right"]},{"label":["X72"],"name":[72],"type":["dbl"],"align":["right"]},{"label":["X73"],"name":[73],"type":["dbl"],"align":["right"]},{"label":["X74"],"name":[74],"type":["dbl"],"align":["right"]},{"label":["X75"],"name":[75],"type":["dbl"],"align":["right"]},{"label":["X76"],"name":[76],"type":["dbl"],"align":["right"]},{"label":["X77"],"name":[77],"type":["dbl"],"align":["right"]},{"label":["X78"],"name":[78],"type":["dbl"],"align":["right"]},{"label":["X79"],"name":[79],"type":["dbl"],"align":["right"]},{"label":["X80"],"name":[80],"type":["dbl"],"align":["right"]},{"label":["X81"],"name":[81],"type":["dbl"],"align":["right"]},{"label":["X82"],"name":[82],"type":["dbl"],"align":["right"]},{"label":["X83"],"name":[83],"type":["dbl"],"align":["right"]},{"label":["X84"],"name":[84],"type":["dbl"],"align":["right"]},{"label":["X85"],"name":[85],"type":["dbl"],"align":["right"]},{"label":["X86"],"name":[86],"type":["dbl"],"align":["right"]},{"label":["X87"],"name":[87],"type":["dbl"],"align":["right"]},{"label":["X88"],"name":[88],"type":["dbl"],"align":["right"]},{"label":["X89"],"name":[89],"type":["dbl"],"align":["right"]},{"label":["X90"],"name":[90],"type":["dbl"],"align":["right"]},{"label":["X91"],"name":[91],"type":["dbl"],"align":["right"]},{"label":["X92"],"name":[92],"type":["dbl"],"align":["right"]},{"label":["X93"],"name":[93],"type":["dbl"],"align":["right"]},{"label":["X94"],"name":[94],"type":["dbl"],"align":["right"]},{"label":["X95"],"name":[95],"type":["dbl"],"align":["right"]},{"label":["X96"],"name":[96],"type":["dbl"],"align":["right"]},{"label":["X97"],"name":[97],"type":["dbl"],"align":["right"]},{"label":["X98"],"name":[98],"type":["dbl"],"align":["right"]},{"label":["X99"],"name":[99],"type":["dbl"],"align":["right"]},{"label":["X100"],"name":[100],"type":["dbl"],"align":["right"]},{"label":["X101"],"name":[101],"type":["dbl"],"align":["right"]},{"label":["X102"],"name":[102],"type":["dbl"],"align":["right"]},{"label":["X103"],"name":[103],"type":["dbl"],"align":["right"]},{"label":["X104"],"name":[104],"type":["dbl"],"align":["right"]},{"label":["X105"],"name":[105],"type":["dbl"],"align":["right"]},{"label":["X106"],"name":[106],"type":["dbl"],"align":["right"]},{"label":["X107"],"name":[107],"type":["dbl"],"align":["right"]},{"label":["X108"],"name":[108],"type":["dbl"],"align":["right"]},{"label":["X109"],"name":[109],"type":["dbl"],"align":["right"]},{"label":["X110"],"name":[110],"type":["dbl"],"align":["right"]},{"label":["X111"],"name":[111],"type":["dbl"],"align":["right"]},{"label":["X112"],"name":[112],"type":["dbl"],"align":["right"]},{"label":["X113"],"name":[113],"type":["dbl"],"align":["right"]},{"label":["X114"],"name":[114],"type":["dbl"],"align":["right"]},{"label":["X115"],"name":[115],"type":["dbl"],"align":["right"]},{"label":["X116"],"name":[116],"type":["dbl"],"align":["right"]},{"label":["X117"],"name":[117],"type":["dbl"],"align":["right"]},{"label":["X118"],"name":[118],"type":["dbl"],"align":["right"]},{"label":["X119"],"name":[119],"type":["dbl"],"align":["right"]},{"label":["X120"],"name":[120],"type":["dbl"],"align":["right"]},{"label":["X121"],"name":[121],"type":["dbl"],"align":["right"]},{"label":["X122"],"name":[122],"type":["dbl"],"align":["right"]},{"label":["X123"],"name":[123],"type":["dbl"],"align":["right"]},{"label":["X124"],"name":[124],"type":["dbl"],"align":["right"]},{"label":["X125"],"name":[125],"type":["dbl"],"align":["right"]},{"label":["X126"],"name":[126],"type":["dbl"],"align":["right"]},{"label":["X127"],"name":[127],"type":["dbl"],"align":["right"]},{"label":["X128"],"name":[128],"type":["dbl"],"align":["right"]},{"label":["X129"],"name":[129],"type":["dbl"],"align":["right"]},{"label":["X130"],"name":[130],"type":["dbl"],"align":["right"]},{"label":["X131"],"name":[131],"type":["dbl"],"align":["right"]},{"label":["X132"],"name":[132],"type":["dbl"],"align":["right"]},{"label":["X133"],"name":[133],"type":["dbl"],"align":["right"]},{"label":["X134"],"name":[134],"type":["dbl"],"align":["right"]},{"label":["X135"],"name":[135],"type":["dbl"],"align":["right"]},{"label":["X136"],"name":[136],"type":["dbl"],"align":["right"]},{"label":["X137"],"name":[137],"type":["dbl"],"align":["right"]},{"label":["X138"],"name":[138],"type":["dbl"],"align":["right"]},{"label":["X139"],"name":[139],"type":["dbl"],"align":["right"]},{"label":["X140"],"name":[140],"type":["dbl"],"align":["right"]},{"label":["X141"],"name":[141],"type":["dbl"],"align":["right"]}],"data":[{"1":"-0.1125218","2":"-2.8272038","3":"-3.773897","4":"-4.349751","5":"-4.376041","6":"-3.474986","7":"-2.181408","8":"-1.8182865","9":"-1.2505219","10":"-0.47749208","11":"-0.3638079","12":"-0.4919566","13":"-0.4218551","14":"-0.3092009","15":"-0.4959387","16":"-0.3421187","17":"-0.3553363","18":"-0.36791303","19":"-0.3165028","20":"-0.4123740","21":"-0.47167181","22":"-0.41345783","23":"-0.3646170","24":"-0.4492983","25":"-0.471418660","26":"-0.42477658","27":"-0.46251673","28":"-0.55247236","29":"-0.47537519","30":"-0.6942000","31":"-0.7018681","32":"-0.5938118","33":"-0.6606842","34":"-0.7138307","35":"-0.7698069","36":"-0.6722816","37":"-0.6536760","38":"-0.6394056","39":"-0.5593023","40":"-0.5916703","41":"-0.4932233","42":"-0.4630518","43":"-0.30164382","44":"-0.23273401","45":"-0.12505488","46":"-0.1539431","47":"-0.024357404","48":"-0.06560876","49":"0.03499926","50":"0.06193522","51":"0.07119542","52":"0.12392505","53":"0.103123710","54":"0.22522849","55":"0.12868305","56":"0.30248315","57":"0.25727621","58":"0.19635161","59":"0.17938297","60":"0.2447286","61":"0.34121687","62":"0.3282044","63":"0.4060417","64":"0.44660507","65":"0.4240682","66":"0.4815120","67":"0.4778438","68":"0.6240826","69":"0.5745846","70":"0.5980132","71":"0.5645919","72":"0.6079790","73":"0.6206346","74":"0.6562529","75":"0.6847481","76":"0.6942728","77":"0.6655838","78":"0.5757958","79":"0.6381348","80":"0.6149170","81":"0.5690834","82":"0.4685757","83":"0.4428178","84":"0.4682744","85":"0.4324929","86":"0.4079579","87":"0.4186226","88":"0.3625308","89":"0.4109590","90":"0.4716663","91":"0.3721668","92":"0.3378754","93":"0.2214051","94":"0.2739975","95":"0.2986641","96":"0.2635636","97":"0.3425635","98":"0.4195053","99":"0.5866074","100":"0.8606239","101":"1.1733446","102":"1.258179","103":"1.433789","104":"1.700533","105":"1.999043","106":"2.125341","107":"1.993291","108":"1.932246","109":"1.7974367","110":"1.5222839","111":"1.2511679","112":"0.99873034","113":"0.4837224","114":"0.02313229","115":"-0.1949138","116":"-0.22091729","117":"-0.2437367","118":"-0.2546946","119":"-0.2911356","120":"-0.2564903","121":"-0.2278743","122":"-0.3224228","123":"-0.2892859","124":"-0.31816951","125":"-0.3636536","126":"-0.3934558","127":"-0.2664189","128":"-0.25682316","129":"-0.2886940","130":"-0.16233755","131":"0.1603477","132":"0.7921679","133":"0.9335412","134":"0.7969578","135":"0.57862066","136":"0.2577399","137":"0.2280772","138":"0.1234308","139":"0.9252862","140":"0.1931374","141":"1"},{"1":"-1.1008778","2":"-3.9968398","3":"-4.285843","4":"-4.506579","5":"-4.022377","6":"-3.234368","7":"-1.566126","8":"-0.9922577","9":"-0.7546797","10":"0.04232117","11":"0.1489509","12":"0.1835271","13":"0.2948761","14":"0.1902327","15":"0.2355750","16":"0.2534871","17":"0.2217424","18":"0.05023326","19":"0.1780421","20":"0.1395632","21":"0.04679443","22":"0.04300714","23":"0.1065443","24":"0.0126540","25":"0.003994854","26":"0.04572418","27":"-0.04599936","28":"-0.07266696","29":"-0.07107791","30":"-0.1538665","31":"-0.2272544","32":"-0.2492697","33":"-0.2534894","34":"-0.3328352","35":"-0.2643300","36":"-0.3458252","37":"-0.3107811","38":"-0.3341598","39":"-0.3061779","40":"-0.1745625","41":"-0.2061602","42":"-0.2244797","43":"-0.04868393","44":"-0.01962116","45":"0.09480519","46":"0.1167864","47":"0.185185920","48":"0.23052577","49":"0.13802707","50":"0.24442554","51":"0.27169477","52":"0.25900331","53":"0.269201660","54":"0.12706463","55":"0.20207339","56":"0.25598343","57":"0.15311526","58":"0.21021583","59":"0.19108187","60":"0.1909270","61":"0.21051006","62":"0.2071076","63":"0.2048883","64":"0.20086474","65":"0.3469196","66":"0.3480019","67":"0.2545373","68":"0.3319746","69":"0.3566903","70":"0.3499298","71":"0.4303796","72":"0.4675016","73":"0.4860631","74":"0.4031884","75":"0.4789557","76":"0.3973918","77":"0.4641200","78":"0.4517954","79":"0.3613612","80":"0.3798309","81":"0.3427853","82":"0.3991066","83":"0.3875084","84":"0.2557035","85":"0.2840341","86":"0.2849926","87":"0.2501081","88":"0.1730363","89":"0.1494226","90":"0.1416850","91":"0.2222610","92":"0.1728471","93":"0.1507793","94":"0.1765660","95":"0.2809420","96":"0.4899390","97":"0.6608888","98":"0.8931933","99":"1.0269972","100":"1.2023937","101":"1.5574096","102":"1.808428","103":"2.164346","104":"2.070747","105":"1.903614","106":"1.764455","107":"1.507769","108":"1.293428","109":"0.8945621","110":"0.5780158","111":"0.2443431","112":"-0.28644345","113":"-0.5158813","114":"-0.73270694","115":"-0.8324655","116":"-0.80331806","117":"-0.8362525","118":"-0.7778646","119":"-0.7747530","120":"-0.7334039","121":"-0.7213863","122":"-0.8320952","123":"-0.7119816","124":"-0.75186730","125":"-0.7577196","126":"-0.8531197","127":"-0.7669884","128":"-0.68816064","129":"-0.5199235","130":"0.03940617","131":"0.5603268","132":"0.5383558","133":"0.6568808","134":"0.7874896","135":"0.72404623","136":"0.5557837","137":"0.4763333","138":"0.7738197","139":"1.1196209","140":"-1.4362499","141":"1"},{"1":"-0.5670880","2":"-2.5934502","3":"-3.874230","4":"-4.584095","5":"-4.187449","6":"-3.151462","7":"-1.742940","8":"-1.4906585","9":"-1.1835803","10":"-0.39422869","11":"-0.2828968","12":"-0.3569258","13":"-0.2872975","14":"-0.3994889","15":"-0.4732441","16":"-0.3790476","17":"-0.3990390","18":"-0.17859449","19":"-0.3395223","20":"-0.4984472","21":"-0.33725108","22":"-0.42547978","23":"-0.4239523","24":"-0.4631705","25":"-0.493253150","26":"-0.54974899","27":"-0.52983109","28":"-0.53093478","29":"-0.50236490","30":"-0.4173677","31":"-0.5263457","32":"-0.4710050","33":"-0.6767843","34":"-0.8986119","35":"-0.6105710","36":"-0.5301643","37":"-0.7656744","38":"-0.5819372","39":"-0.5378476","40":"-0.5563860","41":"-0.4380235","42":"-0.4362480","43":"-0.40011375","44":"-0.13498651","45":"-0.23934677","46":"-0.1202444","47":"-0.001971404","48":"0.28500048","49":"0.31564573","50":"0.10736401","51":"0.10952148","52":"0.15807843","53":"0.291897790","54":"0.26129450","55":"0.18840714","56":"0.14065136","57":"0.26336542","58":"0.28720706","59":"0.31431725","60":"0.1779424","61":"0.13829008","62":"0.3210687","63":"0.4581677","64":"0.25191615","65":"0.2613529","66":"0.2774875","67":"0.2987933","68":"0.4590753","69":"0.4191466","70":"0.5205089","71":"0.5377612","72":"0.6032107","73":"0.4756340","74":"0.5216929","75":"0.7352483","76":"0.7295411","77":"0.7185233","78":"0.4984332","79":"0.5454410","80":"0.6048267","81":"0.5212964","82":"0.3943806","83":"0.4050202","84":"0.5975630","85":"0.5311300","86":"0.3776509","87":"0.4677009","88":"0.4575693","89":"0.3411161","90":"0.4079132","91":"0.4591270","92":"0.4039366","93":"0.2981912","94":"0.4611005","95":"0.6646591","96":"0.5877572","97":"0.7013247","98":"0.9172046","99":"1.2479873","100":"1.5055679","101":"1.6401054","102":"1.810988","103":"2.185398","104":"2.262985","105":"2.052920","106":"1.890488","107":"1.793033","108":"1.564784","109":"1.2346189","110":"0.9003020","111":"0.5519571","112":"0.25822163","113":"-0.1285870","114":"-0.09258529","115":"-0.1686063","116":"-0.49598880","117":"-0.3950345","118":"-0.3282383","119":"-0.4481380","120":"-0.2682301","121":"-0.4564148","122":"-0.3578669","123":"-0.3175083","124":"-0.43411223","125":"-0.5492035","126":"-0.3246155","127":"-0.2680824","128":"-0.22038421","129":"-0.1174290","130":"0.61405916","131":"1.2848254","132":"0.8860734","133":"0.5314524","134":"0.3113768","135":"-0.02191896","136":"-0.7136834","137":"-0.5321967","138":"0.3210966","139":"0.9042267","140":"-0.4217966","141":"1"},{"1":"0.4904725","2":"-1.9144071","3":"-3.616364","4":"-4.318823","5":"-4.268016","6":"-3.881110","7":"-2.993280","8":"-1.6711314","9":"-1.3338845","10":"-0.96562916","11":"-0.1833186","12":"-0.1016566","13":"-0.2738744","14":"-0.1278176","15":"-0.1959835","16":"-0.2135229","17":"-0.1764727","18":"-0.15693160","19":"-0.1491723","20":"-0.1815100","21":"-0.18007406","22":"-0.24615133","23":"-0.2742599","24":"-0.1409596","25":"-0.277448770","26":"-0.38254906","27":"-0.31193709","28":"-0.36009264","29":"-0.40596818","30":"-0.5714334","31":"-0.5241056","32":"-0.5378865","33":"-0.6067775","34":"-0.6614462","35":"-0.6833748","36":"-0.7466826","37":"-0.6356621","38":"-0.6252309","39":"-0.5400938","40":"-0.6749949","41":"-0.6539490","42":"-0.5669164","43":"-0.52404493","44":"-0.41471114","45":"-0.38778691","46":"-0.2844373","47":"-0.072744620","48":"-0.16012546","49":"-0.09215954","50":"0.06716490","51":"0.08147214","52":"0.05618175","53":"0.024692229","54":"0.07439508","55":"0.15288791","56":"0.09103325","57":"0.11015952","58":"0.11727766","59":"0.11383231","60":"0.1418079","61":"0.27149224","62":"0.2497428","63":"0.1976078","64":"0.24393891","65":"0.3865384","66":"0.3000195","67":"0.3098010","68":"0.3446698","69":"0.3897099","70":"0.4428501","71":"0.4334296","72":"0.5487101","73":"0.5250366","74":"0.5219750","75":"0.6239537","76":"0.5491593","77":"0.6691888","78":"0.6299282","79":"0.5395734","80":"0.5992830","81":"0.4978532","82":"0.6380932","83":"0.6117370","84":"0.4919082","85":"0.5739486","86":"0.5162447","87":"0.5726297","88":"0.4845906","89":"0.3743818","90":"0.4617725","91":"0.4146607","92":"0.3716388","93":"0.4451696","94":"0.4841696","95":"0.5560606","96":"0.6587243","97":"0.8611579","98":"1.0163973","99":"1.1356060","100":"1.2169730","101":"1.5530785","102":"1.772155","103":"2.000769","104":"1.925003","105":"1.898426","106":"1.720953","107":"1.501711","108":"1.422492","109":"1.0232255","110":"0.7763413","111":"0.5044263","112":"0.05638187","113":"-0.2331606","114":"-0.40638829","115":"-0.3275280","116":"-0.46086800","117":"-0.4025356","118":"-0.3457516","119":"-0.3542065","120":"-0.4399588","121":"-0.4253259","122":"-0.4397887","123":"-0.4518353","124":"-0.39592642","125":"-0.4487623","126":"-0.3917891","127":"-0.3763075","128":"-0.46106907","129":"-0.2535244","130":"0.21300588","131":"0.4911732","132":"0.3508164","133":"0.4991106","134":"0.6003450","135":"0.84206940","136":"0.9520735","137":"0.9901332","138":"1.0867984","139":"1.4030110","140":"-0.3835643","141":"1"},{"1":"0.8002320","2":"-0.8742519","3":"-2.384761","4":"-3.973292","5":"-4.338224","6":"-3.802422","7":"-2.534510","8":"-1.7834233","9":"-1.5944504","10":"-0.75319899","11":"-0.2981066","12":"-0.4289280","13":"-0.4913508","14":"-0.3613042","15":"-0.3392955","16":"-0.3249515","17":"-0.2901133","18":"-0.36305106","19":"-0.5256838","20":"-0.5974230","21":"-0.57552317","22":"-0.56750306","23":"-0.5045548","24":"-0.6184062","25":"-0.682813540","26":"-0.74384873","27":"-0.81558784","28":"-0.82690193","29":"-0.78237433","30":"-0.9294620","31":"-0.9996717","32":"-1.0609695","33":"-1.0078773","34":"-1.0287349","35":"-1.1226293","36":"-1.0286499","37":"-1.0465146","38":"-1.0633724","39":"-1.1224228","40":"-0.9832420","41":"-0.8558653","42":"-0.7912660","43":"-0.58875425","44":"-0.51830558","45":"-0.39729838","46":"-0.3543328","47":"-0.207424920","48":"-0.08826602","49":"-0.16873361","50":"-0.06759208","51":"-0.03277228","52":"0.07189947","53":"0.081485179","54":"0.06722526","55":"0.13271969","56":"0.07024093","57":"0.10043175","58":"0.15041753","59":"0.10988654","60":"0.1488603","61":"0.20874762","62":"0.2282362","63":"0.2736642","64":"0.29952441","65":"0.3270623","66":"0.2423141","67":"0.3861052","68":"0.4190872","69":"0.4397179","70":"0.4889538","71":"0.5417151","72":"0.5738692","73":"0.6335548","74":"0.4116710","75":"0.4409173","76":"0.5887054","77":"0.5308650","78":"0.5589645","79":"0.6068742","80":"0.6147287","81":"0.5377716","82":"0.5992942","83":"0.6404630","84":"0.5683991","85":"0.5447105","86":"0.5579589","87":"0.5377615","88":"0.4722924","89":"0.4665956","90":"0.6344169","91":"0.4251749","92":"0.4207772","93":"0.4405230","94":"0.3610280","95":"0.3592994","96":"0.3213663","97":"0.4213255","98":"0.5051220","99":"0.6774887","100":"0.9086928","101":"0.9822303","102":"1.155363","103":"1.336254","104":"1.627534","105":"1.717594","106":"1.696487","107":"1.741686","108":"1.674078","109":"1.5469278","110":"1.3317385","111":"1.1101682","112":"0.92221037","113":"0.5217766","114":"0.15485176","115":"-0.1238607","116":"-0.20299778","117":"-0.2479560","118":"-0.2191218","119":"-0.2146952","120":"-0.3192147","121":"-0.1985971","122":"-0.1516179","123":"-0.1295926","124":"-0.07493893","125":"-0.1968070","126":"-0.1747948","127":"-0.2088327","128":"-0.21075375","129":"-0.1004854","130":"0.19744621","131":"0.9666060","132":"1.1488838","133":"0.9584343","134":"1.0590254","135":"1.37168230","136":"1.2773918","137":"0.9603039","138":"0.9710196","139":"1.6143924","140":"1.4214563","141":"1"},{"1":"-1.5076736","2":"-3.5745500","3":"-4.478011","4":"-4.408275","5":"-3.321242","6":"-2.105171","7":"-1.481048","8":"-1.3013622","9":"-0.4982396","10":"-0.28692830","11":"-0.3900309","12":"-0.2638416","13":"-0.3180242","14":"-0.1859156","15":"-0.2697900","16":"-0.3222454","17":"-0.3092531","18":"-0.39110135","19":"-0.3032594","20":"-0.3192919","21":"-0.40791759","22":"-0.42157915","23":"-0.4813804","24":"-0.4475185","25":"-0.524850400","26":"-0.46911847","27":"-0.58260667","28":"-0.67903585","29":"-0.65205179","30":"-0.8468528","31":"-0.7666816","32":"-0.7351483","33":"-0.7884646","34":"-0.8512765","35":"-0.8370098","36":"-0.8435009","37":"-0.8270417","38":"-0.8780608","39":"-0.7550946","40":"-0.8099210","41":"-0.6794154","42":"-0.5834180","43":"-0.45742032","44":"-0.37778498","45":"-0.36062856","46":"-0.2317265","47":"-0.236841600","48":"-0.04771065","49":"-0.05263242","50":"-0.07435492","51":"-0.09440888","52":"-0.08268415","53":"0.006754309","54":"-0.08292519","55":"-0.06149897","56":"0.02166685","57":"-0.04082262","58":"0.03808829","59":"0.04111276","60":"-0.1071657","61":"0.03470133","62":"0.0857038","63":"0.1218563","64":"0.08889131","65":"0.1856777","66":"0.2299073","67":"0.1832041","68":"0.2868453","69":"0.2795620","70":"0.4185915","71":"0.3946094","72":"0.4276403","73":"0.4448439","74":"0.4682988","75":"0.5154246","76":"0.6362953","77":"0.6332517","78":"0.6446601","79":"0.6275454","80":"0.5300407","81":"0.4928233","82":"0.4792082","83":"0.4133600","84":"0.4756238","85":"0.4364935","86":"0.4068417","87":"0.4433003","88":"0.3176839","89":"0.3613207","90":"0.3610005","91":"0.2414258","92":"0.3181150","93":"0.3251511","94":"0.4783047","95":"0.4760798","96":"0.5320627","97":"0.7954846","98":"0.9451694","99":"1.1049370","100":"1.2906530","101":"1.4892172","102":"1.755300","103":"1.960918","104":"2.042437","105":"1.902829","106":"1.902875","107":"1.758074","108":"1.425782","109":"1.2102201","110":"0.9283974","111":"0.6412640","112":"0.17552516","113":"-0.1069101","114":"-0.13204268","115":"-0.1658357","116":"-0.09857054","117":"-0.2660220","118":"-0.2372939","119":"-0.1376878","120":"-0.1006746","121":"-0.1074989","122":"-0.2103621","123":"-0.1301039","124":"-0.10763115","125":"-0.1611459","126":"-0.1013163","127":"-0.0952555","128":"-0.06917216","129":"0.1548778","130":"0.69565622","131":"1.2149308","132":"1.0890684","133":"0.9833686","134":"1.0141238","135":"0.95262870","136":"0.7493260","137":"1.0070757","138":"1.6349896","139":"1.4933655","140":"-0.7831344","141":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<details open=""><summary>Code</summary><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">raw_data</span> <span class="op">&lt;-</span> <span class="va">dataframe</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section><section id="preprocessing" class="level1"><h1>Preprocessing</h1>
+<section id="split-the-data" class="level2"><h2 class="anchored" data-anchor-id="split-the-data">Split the data</h2>
+<div class="cell">
+<details open=""><summary>Code</summary><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">raw_data_split</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rsample.tidymodels.org/reference/initial_split.html">initial_split</a></span><span class="op">(</span><span class="va">raw_data</span>,prop <span class="op">=</span> <span class="fl">.8</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">train_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rsample.tidymodels.org/reference/initial_split.html">training</a></span><span class="op">(</span><span class="va">raw_data_split</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">test_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rsample.tidymodels.org/reference/initial_split.html">testing</a></span><span class="op">(</span><span class="va">raw_data_split</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section><section id="normalize-the-data-to-01." class="level2"><h2 class="anchored" data-anchor-id="normalize-the-data-to-01.">Normalize the data to [0,1].</h2>
+<div class="cell">
+<details open=""><summary>Code</summary><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">target_varible</span> <span class="op">&lt;-</span> <span class="va">raw_data</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">raw_data</span><span class="op">)</span><span class="op">]</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">recipe_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html">recipe</a></span><span class="op">(</span><span class="va">train_data</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/roles.html">update_role</a></span><span class="op">(</span><span class="va">target_varible</span>,new_role <span class="op">=</span> <span class="st">'outcome'</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/roles.html">update_role</a></span><span class="op">(</span><span class="op">-</span><span class="va">target_varible</span>,new_role <span class="op">=</span> <span class="st">'predictor'</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_range.html">step_range</a></span><span class="op">(</span><span class="fu"><a href="https://recipes.tidymodels.org/reference/has_role.html">all_predictors</a></span><span class="op">(</span><span class="op">)</span>,min <span class="op">=</span> <span class="fl">0</span>,max <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stderr">
+<pre><code>Note: Using an external vector in selections is ambiguous.
+ℹ Use `all_of(target_varible)` instead of `target_varible` to silence this message.
+ℹ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.
+This message is displayed once per session.</code></pre>
+</div>
+<details open=""><summary>Code</summary><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">preped_recipe_data</span> <span class="op">&lt;-</span> <span class="va">recipe_data</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/prep.html">prep</a></span><span class="op">(</span><span class="va">train_data</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">baked_train_data</span> <span class="op">&lt;-</span> <span class="va">preped_recipe_data</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/bake.html">bake</a></span><span class="op">(</span>new_data <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span><span class="va">baked_test_data</span> <span class="op">&lt;-</span> <span class="va">preped_recipe_data</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/bake.html">bake</a></span><span class="op">(</span><span class="va">test_data</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section><section id="separate-datasets-for-future-usage" class="level2"><h2 class="anchored" data-anchor-id="separate-datasets-for-future-usage">Separate datasets for future usage</h2>
+<p>You will train the autoencoder using only the normal rhythms</p>
+<p>Which are labeled in this dataset as 1.</p>
+<p>Separate the normal rhythms from the abnormal rhythms.</p>
+<div class="cell">
+<details open=""><summary>Code</summary><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">normal_train_data</span> <span class="op">&lt;-</span>  <span class="va">baked_train_data</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/get.html">get</a></span><span class="op">(</span><span class="va">target_varible</span><span class="op">)</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">normal_test_data</span> <span class="op">&lt;-</span>  <span class="va">baked_test_data</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/get.html">get</a></span><span class="op">(</span><span class="va">target_varible</span><span class="op">)</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">anomalous_train_data</span> <span class="op">&lt;-</span>  <span class="va">baked_train_data</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/get.html">get</a></span><span class="op">(</span><span class="va">target_varible</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span></span>
+<span><span class="va">anomalous_test_data</span> <span class="op">&lt;-</span>  <span class="va">baked_test_data</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/get.html">get</a></span><span class="op">(</span><span class="va">target_varible</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section></section><section id="see-the-data" class="level1"><h1>See the data</h1>
+<section id="normal-ecg" class="level2"><h2 class="anchored" data-anchor-id="normal-ecg">Normal ECG</h2>
+<div class="cell">
+<details open=""><summary>Code</summary><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Plot a normal ECG.</span></span>
+<span></span>
+<span><span class="va">normal_train_data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span><span class="op">-</span><span class="va">target_varible</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>name <span class="op">=</span> <span class="va">name</span> <span class="op">|&gt;</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="st">'\\d+'</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">name</span>,y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">'A Normal ECG'</span>,x <span class="op">=</span> <span class="cn">NULL</span>,y <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section><section id="anomalous-ecg" class="level2"><h2 class="anchored" data-anchor-id="anomalous-ecg">Anomalous ECG</h2>
+<div class="cell">
+<details open=""><summary>Code</summary><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">anomalous_train_data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span><span class="op">-</span><span class="va">target_varible</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>name <span class="op">=</span> <span class="va">name</span> <span class="op">|&gt;</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="st">'\\d+'</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">name</span>,y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">'A Anomalous ECG'</span>,x <span class="op">=</span> <span class="cn">NULL</span>,y <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section></section><section id="create-matrixes-for-tensorflow" class="level1"><h1>Create Matrixes for tensorflow</h1>
+<div class="cell">
+<details open=""><summary>Code</summary><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">normal_train_data_x</span> <span class="op">&lt;-</span> <span class="va">normal_train_data</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">target_varible</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">normal_test_data_x</span> <span class="op">&lt;-</span> <span class="va">normal_test_data</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">target_varible</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">test_data_x</span> <span class="op">&lt;-</span> <span class="va">baked_test_data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">target_varible</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">anomalous_test_data_x</span> <span class="op">&lt;-</span> <span class="va">anomalous_test_data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">target_varible</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section><section id="build-the-auto-encoder--using-the-functional-api" class="level1"><h1>Build The Auto Encoder- Using the functional api</h1>
+<section id="discover-the-input-and-output-dimensions" class="level2"><h2 class="anchored" data-anchor-id="discover-the-input-and-output-dimensions">Discover the input and output dimensions</h2>
+<div class="cell">
+<details open=""><summary>Code</summary><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># dim_features is the dimension of your features</span></span>
+<span><span class="va">dim_features</span> <span class="op">&lt;-</span> <span class="va">normal_train_data</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">target_varible</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># latent dim is usually the smallest layer of the network at the end of the encoder model</span></span>
+<span><span class="va">latent_dim</span> <span class="op">&lt;-</span> <span class="fl">8</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section><section id="define-the-encoder" class="level2"><h2 class="anchored" data-anchor-id="define-the-encoder">Define the encoder</h2>
+<div class="cell">
+<details open=""><summary>Code</summary><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#|warning: false</span></span>
+<span><span class="va">encoder_input</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/keras/man/layer_input.html">layer_input</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">dim_features</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"features"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stderr">
+<pre><code>Loaded Tensorflow version 2.9.2</code></pre>
+</div>
+<details open=""><summary>Code</summary><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">encoder_output</span> <span class="op">&lt;-</span> <span class="va">encoder_input</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/keras/man/layer_dense.html">layer_dense</a></span><span class="op">(</span><span class="fl">32</span>,activation <span class="op">=</span> <span class="st">"relu"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/keras/man/layer_dense.html">layer_dense</a></span><span class="op">(</span><span class="fl">16</span>,activation <span class="op">=</span> <span class="st">"relu"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/keras/man/layer_dense.html">layer_dense</a></span><span class="op">(</span><span class="va">latent_dim</span>,activation <span class="op">=</span> <span class="st">"relu"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">encoder</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/keras/man/keras_model.html">keras_model</a></span><span class="op">(</span><span class="va">encoder_input</span>, <span class="va">encoder_output</span>, name <span class="op">=</span> <span class="st">"encoder"</span><span class="op">)</span></span>
+<span><span class="va">encoder</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
+<pre><code>Model: "encoder"
+________________________________________________________________________________
+ Layer (type)                       Output Shape                    Param #     
+================================================================================
+ features (InputLayer)              [(None, 140)]                   0           
+ dense_2 (Dense)                    (None, 32)                      4512        
+ dense_1 (Dense)                    (None, 16)                      528         
+ dense (Dense)                      (None, 8)                       136         
+================================================================================
+Total params: 5,176
+Trainable params: 5,176
+Non-trainable params: 0
+________________________________________________________________________________</code></pre>
+</div>
+</div>
+</section><section id="define-decoder" class="level2"><h2 class="anchored" data-anchor-id="define-decoder">Define Decoder</h2>
+<div class="cell">
+<details open=""><summary>Code</summary><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">decoder_input</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/keras/man/layer_input.html">layer_input</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">latent_dim</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"latent_dim"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">decoder_output</span> <span class="op">&lt;-</span> <span class="va">decoder_input</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/keras/man/layer_dense.html">layer_dense</a></span><span class="op">(</span><span class="fl">16</span>,activation <span class="op">=</span> <span class="st">"relu"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/keras/man/layer_dense.html">layer_dense</a></span><span class="op">(</span><span class="fl">32</span>,activation <span class="op">=</span> <span class="st">"relu"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/keras/man/layer_dense.html">layer_dense</a></span><span class="op">(</span><span class="va">dim_features</span>,activation <span class="op">=</span> <span class="st">"sigmoid"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">decoder</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/keras/man/keras_model.html">keras_model</a></span><span class="op">(</span><span class="va">decoder_input</span>, <span class="va">decoder_output</span>, name <span class="op">=</span> <span class="st">"decoder"</span><span class="op">)</span></span>
+<span><span class="va">decoder</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
+<pre><code>Model: "decoder"
+________________________________________________________________________________
+ Layer (type)                       Output Shape                    Param #     
+================================================================================
+ latent_dim (InputLayer)            [(None, 8)]                     0           
+ dense_5 (Dense)                    (None, 16)                      144         
+ dense_4 (Dense)                    (None, 32)                      544         
+ dense_3 (Dense)                    (None, 140)                     4620        
+================================================================================
+Total params: 5,308
+Trainable params: 5,308
+Non-trainable params: 0
+________________________________________________________________________________</code></pre>
+</div>
+</div>
+</section><section id="define-the-auto-encoder" class="level2"><h2 class="anchored" data-anchor-id="define-the-auto-encoder">Define The Auto Encoder</h2>
+<div class="cell">
+<details open=""><summary>Code</summary><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">encoded</span> <span class="op">&lt;-</span> <span class="fu">encoder</span><span class="op">(</span><span class="va">encoder_input</span><span class="op">)</span></span>
+<span><span class="va">decoded</span> <span class="op">&lt;-</span> <span class="fu">decoder</span><span class="op">(</span><span class="va">encoded</span><span class="op">)</span></span>
+<span><span class="va">autoencoder</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/keras/man/keras_model.html">keras_model</a></span><span class="op">(</span><span class="va">encoder_input</span>, <span class="va">decoded</span>,</span>
+<span>                           name <span class="op">=</span> <span class="st">"autoencoder"</span><span class="op">)</span></span>
+<span><span class="va">autoencoder</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
+<pre><code>Model: "autoencoder"
+________________________________________________________________________________
+ Layer (type)                       Output Shape                    Param #     
+================================================================================
+ features (InputLayer)              [(None, 140)]                   0           
+ encoder (Functional)               (None, 8)                       5176        
+ decoder (Functional)               (None, 140)                     5308        
+================================================================================
+Total params: 10,484
+Trainable params: 10,484
+Non-trainable params: 0
+________________________________________________________________________________</code></pre>
+</div>
+</div>
+</section><section id="fit-the-model" class="level2"><h2 class="anchored" data-anchor-id="fit-the-model">Fit the model</h2>
+<div class="cell">
+<details open=""><summary>Code</summary><div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">history</span> <span class="op">&lt;-</span> <span class="va">autoencoder</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://generics.r-lib.org/reference/compile.html">compile</a></span><span class="op">(</span>loss <span class="op">=</span> <span class="st">"mae"</span>,</span>
+<span>          optimizer <span class="op">=</span> <span class="st">"adam"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html">fit</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="va">normal_train_data_x</span>,</span>
+<span>    y <span class="op">=</span> <span class="va">normal_train_data_x</span>,</span>
+<span>    epochs <span class="op">=</span> <span class="fl">20</span>,</span>
+<span>    batch_size <span class="op">=</span> <span class="fl">512</span>,</span>
+<span>    validation_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>      <span class="va">test_data_x</span>,</span>
+<span>      <span class="va">test_data_x</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    shuffle <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  <span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details open=""><summary>Code</summary><div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">history</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section></section><section id="plot-the-predictions" class="level1"><h1>Plot the predictions</h1>
+<section id="reconstruction-on-normal-data" class="level2"><h2 class="anchored" data-anchor-id="reconstruction-on-normal-data">Reconstruction on Normal data</h2>
+<div class="cell">
+<details open=""><summary>Code</summary><div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">encoded_data</span> <span class="op">&lt;-</span> <span class="va">encoder</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">normal_test_data_x</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">decoded_data</span> <span class="op">&lt;-</span> <span class="va">decoder</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">encoded_data</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">decoded_data_to_plot</span> <span class="op">&lt;-</span> <span class="va">decoded_data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html">everything</a></span><span class="op">(</span><span class="op">)</span>,values_to <span class="op">=</span> <span class="st">'Reconstruction'</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>name <span class="op">=</span> <span class="va">name</span> <span class="op">|&gt;</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="st">'\\d+'</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stderr">
+<pre><code>Warning: The `x` argument of `as_tibble.matrix()` must have unique column names if `.name_repair` is omitted as of tibble 2.0.0.
+Using compatibility `.name_repair`.
+This warning is displayed once every 8 hours.
+Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</code></pre>
+</div>
+<details open=""><summary>Code</summary><div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">normal_test_data_to_plot</span> <span class="op">&lt;-</span> <span class="va">normal_test_data_x</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html">everything</a></span><span class="op">(</span><span class="op">)</span>,values_to <span class="op">=</span> <span class="st">'Input'</span><span class="op">)</span><span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>name <span class="op">=</span> <span class="va">name</span> <span class="op">|&gt;</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="st">'\\d+'</span><span class="op">)</span><span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">data_to_plot</span> <span class="op">&lt;-</span> <span class="va">decoded_data_to_plot</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">normal_test_data_to_plot</span>,by <span class="op">=</span> <span class="st">'name'</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="va">data_to_plot</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="op">-</span><span class="va">name</span>,names_to <span class="op">=</span> <span class="st">'source'</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">name</span>,y <span class="op">=</span> <span class="va">value</span>,colour <span class="op">=</span> <span class="va">source</span>,group <span class="op">=</span> <span class="va">source</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">'Recontruction on test data'</span>,x <span class="op">=</span> <span class="cn">NULL</span>,y<span class="op">=</span><span class="cn">NULL</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section><section id="reconstruction-on-anomalous-data" class="level2"><h2 class="anchored" data-anchor-id="reconstruction-on-anomalous-data">Reconstruction on Anomalous data</h2>
+<p>It is clear that the reconstruction can’t quite create the output, this is what we will exploit to define outliers.</p>
+<div class="cell">
+<details open=""><summary>Code</summary><div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">encoded_data</span> <span class="op">&lt;-</span> <span class="va">encoder</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">anomalous_test_data_x</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">decoded_data</span> <span class="op">&lt;-</span> <span class="va">decoder</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">encoded_data</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">decoded_data_to_plot</span> <span class="op">&lt;-</span> <span class="va">decoded_data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html">everything</a></span><span class="op">(</span><span class="op">)</span>,values_to <span class="op">=</span> <span class="st">'Reconstruction'</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>name <span class="op">=</span> <span class="va">name</span> <span class="op">|&gt;</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="st">'\\d+'</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">normal_test_data_to_plot</span> <span class="op">&lt;-</span> <span class="va">anomalous_test_data_x</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html">everything</a></span><span class="op">(</span><span class="op">)</span>,values_to <span class="op">=</span> <span class="st">'Input'</span><span class="op">)</span><span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>name <span class="op">=</span> <span class="va">name</span> <span class="op">|&gt;</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="st">'\\d+'</span><span class="op">)</span><span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">data_to_plot</span> <span class="op">&lt;-</span> <span class="va">decoded_data_to_plot</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">normal_test_data_to_plot</span>,by <span class="op">=</span> <span class="st">'name'</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="va">data_to_plot</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="op">-</span><span class="va">name</span>,names_to <span class="op">=</span> <span class="st">'source'</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">name</span>,y <span class="op">=</span> <span class="va">value</span>,colour <span class="op">=</span> <span class="va">source</span>,group <span class="op">=</span> <span class="va">source</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">'Recontruction on Anomalous test data'</span>,x <span class="op">=</span> <span class="cn">NULL</span>,y<span class="op">=</span><span class="cn">NULL</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section></section><section id="detect-anomalies" class="level1"><h1>Detect anomalies</h1>
+<section id="discover-the-threshold-to-flag-annomalies" class="level2"><h2 class="anchored" data-anchor-id="discover-the-threshold-to-flag-annomalies">Discover the threshold to flag annomalies</h2>
+<div class="cell">
+<details open=""><summary>Code</summary><div class="sourceCode" id="cb30"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">reconstructions</span> <span class="op">&lt;-</span>  <span class="va">autoencoder</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">normal_train_data_x</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">train_data_tibble</span> <span class="op">&lt;-</span> <span class="va">normal_train_data_x</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="va">train_loss</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/keras/man/loss-functions.html">loss_mean_squared_error</a></span><span class="op">(</span><span class="va">reconstructions</span>, <span class="va">train_data_tibble</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">data_loss</span> <span class="op">&lt;-</span> <span class="va">train_loss</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">data_loss</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">50</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">'Loss Normal Train Data'</span>,x <span class="op">=</span> <span class="st">'Train Loss'</span>, y <span class="op">=</span> <span class="st">'No of examples'</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<details open=""><summary>Code</summary><div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">threshold</span> <span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">train_loss</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">train_loss</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">threshold</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.0122588</code></pre>
+</div>
+</div>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Completness
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>There are other strategies you could use to select a threshold value above which test examples should be classified as anomalous, the correct approach will depend on your dataset. You can learn more with the links at the end of this tutorial.</p>
+</div>
+</div>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Strategy
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you examine the reconstruction error for the anomalous examples in the test set, you’ll notice most have greater reconstruction error than the threshold. By varing the threshold, you can adjust the precision and recall of your classifier.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+tidy.outliers
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you need something faster, and usually more practical do check out my package tidy.outliers for easy to use outlier detection methods.</p>
+</div>
+</div>
+<div class="cell">
+<details open=""><summary>Code</summary><div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">reconstructions</span> <span class="op">&lt;-</span>  <span class="va">autoencoder</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">anomalous_test_data_x</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">anomalous_test_data_x_tibble</span> <span class="op">&lt;-</span> <span class="va">anomalous_test_data_x</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">test_loss</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/keras/man/loss-functions.html">loss_mean_squared_error</a></span><span class="op">(</span><span class="va">reconstructions</span>, <span class="va">anomalous_test_data_x_tibble</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">data_loss</span> <span class="op">&lt;-</span> <span class="va">test_loss</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">data_loss</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">50</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">'Loss Anomalous Test Data'</span>,x <span class="op">=</span> <span class="st">'Test Loss'</span>, y <span class="op">=</span> <span class="st">'No of examples'</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section><section id="classify-anomalies" class="level2"><h2 class="anchored" data-anchor-id="classify-anomalies">Classify anomalies</h2>
+<div class="cell">
+<details open=""><summary>Code</summary><div class="sourceCode" id="cb34"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">predict_outlier</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">model</span>,<span class="va">data</span>,<span class="va">threshold</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">reconstructions</span> <span class="op">&lt;-</span>  <span class="va">model</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
+<span>  <span class="va">loss</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/pkg/keras/man/loss-functions.html">loss_mean_squared_error</a></span><span class="op">(</span><span class="va">reconstructions</span>, <span class="va">data</span><span class="op">)</span></span>
+<span>  <span class="va">df_result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/keras/man/k_less.html">k_less</a></span><span class="op">(</span><span class="va">loss</span>,<span class="va">threshold</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>    <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>estimate <span class="op">=</span> <span class="va">value</span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">df_result</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">preds</span> <span class="op">&lt;-</span> <span class="fu">predict_outlier</span><span class="op">(</span><span class="va">autoencoder</span>,<span class="va">anomalous_test_data_x</span>,<span class="va">threshold</span><span class="op">)</span></span>
+<span><span class="va">test_data</span> <span class="op">&lt;-</span> <span class="va">anomalous_test_data</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">target_varible</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>truth <span class="op">=</span> <span class="va">target_varible</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>truth <span class="op">=</span> <span class="va">truth</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span>levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">df_result</span> <span class="op">&lt;-</span> <span class="va">test_data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html">bind_cols</a></span><span class="op">(</span><span class="va">preds</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">df_result</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">yardstick</span><span class="fu">::</span><span class="fu"><a href="https://yardstick.tidymodels.org/reference/accuracy.html">accuracy</a></span><span class="op">(</span>truth <span class="op">=</span> <span class="va">truth</span>,estimate <span class="op">=</span> <span class="va">estimate</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[".metric"],"name":[1],"type":["chr"],"align":["left"]},{"label":[".estimator"],"name":[2],"type":["chr"],"align":["left"]},{"label":[".estimate"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"accuracy","2":"binary","3":"0.9760192"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<details open=""><summary>Code</summary><div class="sourceCode" id="cb35"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df_result</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">yardstick</span><span class="fu">::</span><span class="fu"><a href="https://yardstick.tidymodels.org/reference/precision.html">precision</a></span><span class="op">(</span>truth <span class="op">=</span> <span class="va">truth</span>,estimate <span class="op">=</span> <span class="va">estimate</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[".metric"],"name":[1],"type":["chr"],"align":["left"]},{"label":[".estimator"],"name":[2],"type":["chr"],"align":["left"]},{"label":[".estimate"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"precision","2":"binary","3":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<details open=""><summary>Code</summary><div class="sourceCode" id="cb36"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df_result</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">yardstick</span><span class="fu">::</span><span class="fu"><a href="https://yardstick.tidymodels.org/reference/recall.html">recall</a></span><span class="op">(</span>truth <span class="op">=</span> <span class="va">truth</span>,estimate <span class="op">=</span> <span class="va">estimate</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[".metric"],"name":[1],"type":["chr"],"align":["left"]},{"label":[".estimator"],"name":[2],"type":["chr"],"align":["left"]},{"label":[".estimate"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"recall","2":"binary","3":"0.9760192"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</section></section><section id="next-steps" class="level1"><h1>Next Steps</h1>
+<p>Check out the <a href="https://www.tensorflow.org/tutorials/generative/autoencoder#next_steps" title="Tensorflow Next Steps">Tensorflow Next Steps</a></p>
+
+
+<!-- -->
+
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } 
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb37" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Functional Auto Encoder with R Keras"</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "Bruno Testaguzza Carlin"</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="an">image:</span><span class="co"> "autoencoder.png"</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="an">toc:</span><span class="co"> true</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="an">df-print:</span><span class="co"> paged</span></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="an">code-tools:</span><span class="co"> true</span></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a><span class="an">code-fold:</span><span class="co"> show</span></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a><span class="an">code-link:</span><span class="co"> true</span></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span><span class="co"> [tidymodels,tensorflow,code]</span></span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a><span class="fu"># Objective</span></span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>This is a somewhat simple post trying to mimic the guides on auto encoders present in <span class="co">[</span><span class="ot">Third example: Anomaly detection</span><span class="co">](https://www.tensorflow.org/tutorials/generative/autoencoder#third_example_anomaly_detection "Third example: Anomaly detection")</span></span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a><span class="fu"># Libraries</span></span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a>Do keep in mind that in order to use tensorflow you should run</span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a><span class="in">``` r</span></span>
+<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a>tensorflow<span class="sc">::</span><span class="fu">install_tensorflow</span>()</span>
+<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb37-24"><a href="#cb37-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-25"><a href="#cb37-25" aria-hidden="true" tabindex="-1"></a><span class="in">```{r,warning=FALSE}</span></span>
+<span id="cb37-26"><a href="#cb37-26" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(keras)</span>
+<span id="cb37-27"><a href="#cb37-27" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rsample) <span class="sc">|&gt;</span> <span class="fu">suppressMessages</span>()</span>
+<span id="cb37-28"><a href="#cb37-28" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(recipes) <span class="sc">|&gt;</span> <span class="fu">suppressMessages</span>()</span>
+<span id="cb37-29"><a href="#cb37-29" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb37-30"><a href="#cb37-30" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb37-31"><a href="#cb37-31" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb37-32"><a href="#cb37-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-33"><a href="#cb37-33" aria-hidden="true" tabindex="-1"></a><span class="fu"># Download The Dataset</span></span>
+<span id="cb37-34"><a href="#cb37-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-37"><a href="#cb37-37" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb37-38"><a href="#cb37-38" aria-hidden="true" tabindex="-1"></a>dataframe <span class="ot">&lt;-</span>  readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'http://storage.googleapis.com/download.tensorflow.org/data/ecg.csv'</span>,<span class="at">col_names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb37-39"><a href="#cb37-39" aria-hidden="true" tabindex="-1"></a>dataframe <span class="sc">|&gt;</span> <span class="fu">head</span>()</span>
+<span id="cb37-40"><a href="#cb37-40" aria-hidden="true" tabindex="-1"></a>raw_data <span class="ot">&lt;-</span> dataframe</span>
+<span id="cb37-41"><a href="#cb37-41" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb37-42"><a href="#cb37-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-43"><a href="#cb37-43" aria-hidden="true" tabindex="-1"></a><span class="fu"># Preprocessing</span></span>
+<span id="cb37-44"><a href="#cb37-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-45"><a href="#cb37-45" aria-hidden="true" tabindex="-1"></a><span class="fu">## Split the data</span></span>
+<span id="cb37-46"><a href="#cb37-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-49"><a href="#cb37-49" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb37-50"><a href="#cb37-50" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20</span>)</span>
+<span id="cb37-51"><a href="#cb37-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-52"><a href="#cb37-52" aria-hidden="true" tabindex="-1"></a>raw_data_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(raw_data,<span class="at">prop =</span> .<span class="dv">8</span>)</span>
+<span id="cb37-53"><a href="#cb37-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-54"><a href="#cb37-54" aria-hidden="true" tabindex="-1"></a>train_data <span class="ot">&lt;-</span> <span class="fu">training</span>(raw_data_split)</span>
+<span id="cb37-55"><a href="#cb37-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-56"><a href="#cb37-56" aria-hidden="true" tabindex="-1"></a>test_data <span class="ot">&lt;-</span> <span class="fu">testing</span>(raw_data_split)</span>
+<span id="cb37-57"><a href="#cb37-57" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb37-58"><a href="#cb37-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-59"><a href="#cb37-59" aria-hidden="true" tabindex="-1"></a><span class="fu">## Normalize the data to \[0,1\].</span></span>
+<span id="cb37-60"><a href="#cb37-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-63"><a href="#cb37-63" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb37-64"><a href="#cb37-64" aria-hidden="true" tabindex="-1"></a>target_varible <span class="ot">&lt;-</span> raw_data[,<span class="fu">ncol</span>(raw_data)] <span class="sc">|&gt;</span> <span class="fu">names</span>()</span>
+<span id="cb37-65"><a href="#cb37-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-66"><a href="#cb37-66" aria-hidden="true" tabindex="-1"></a>recipe_data <span class="ot">&lt;-</span> <span class="fu">recipe</span>(train_data) <span class="sc">|&gt;</span> </span>
+<span id="cb37-67"><a href="#cb37-67" aria-hidden="true" tabindex="-1"></a>  <span class="fu">update_role</span>(target_varible,<span class="at">new_role =</span> <span class="st">'outcome'</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb37-68"><a href="#cb37-68" aria-hidden="true" tabindex="-1"></a>  <span class="fu">update_role</span>(<span class="sc">-</span>target_varible,<span class="at">new_role =</span> <span class="st">'predictor'</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb37-69"><a href="#cb37-69" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_range</span>(<span class="fu">all_predictors</span>(),<span class="at">min =</span> <span class="dv">0</span>,<span class="at">max =</span> <span class="dv">1</span>)</span>
+<span id="cb37-70"><a href="#cb37-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-71"><a href="#cb37-71" aria-hidden="true" tabindex="-1"></a>preped_recipe_data <span class="ot">&lt;-</span> recipe_data <span class="sc">|&gt;</span> <span class="fu">prep</span>(train_data)</span>
+<span id="cb37-72"><a href="#cb37-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-73"><a href="#cb37-73" aria-hidden="true" tabindex="-1"></a>baked_train_data <span class="ot">&lt;-</span> preped_recipe_data <span class="sc">|&gt;</span> <span class="fu">bake</span>(<span class="at">new_data =</span> <span class="cn">NULL</span>)</span>
+<span id="cb37-74"><a href="#cb37-74" aria-hidden="true" tabindex="-1"></a>baked_test_data <span class="ot">&lt;-</span> preped_recipe_data <span class="sc">|&gt;</span> <span class="fu">bake</span>(test_data)</span>
+<span id="cb37-75"><a href="#cb37-75" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb37-76"><a href="#cb37-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-77"><a href="#cb37-77" aria-hidden="true" tabindex="-1"></a><span class="fu">## Separate datasets for future usage</span></span>
+<span id="cb37-78"><a href="#cb37-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-79"><a href="#cb37-79" aria-hidden="true" tabindex="-1"></a>You will train the autoencoder using only the normal rhythms</span>
+<span id="cb37-80"><a href="#cb37-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-81"><a href="#cb37-81" aria-hidden="true" tabindex="-1"></a>Which are labeled in this dataset as 1.</span>
+<span id="cb37-82"><a href="#cb37-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-83"><a href="#cb37-83" aria-hidden="true" tabindex="-1"></a>Separate the normal rhythms from the abnormal rhythms.</span>
+<span id="cb37-84"><a href="#cb37-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-87"><a href="#cb37-87" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb37-88"><a href="#cb37-88" aria-hidden="true" tabindex="-1"></a>normal_train_data <span class="ot">&lt;-</span>  baked_train_data <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="fu">get</span>(target_varible) <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb37-89"><a href="#cb37-89" aria-hidden="true" tabindex="-1"></a>normal_test_data <span class="ot">&lt;-</span>  baked_test_data <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="fu">get</span>(target_varible) <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb37-90"><a href="#cb37-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-91"><a href="#cb37-91" aria-hidden="true" tabindex="-1"></a>anomalous_train_data <span class="ot">&lt;-</span>  baked_train_data <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="fu">get</span>(target_varible) <span class="sc">==</span> <span class="dv">0</span>)</span>
+<span id="cb37-92"><a href="#cb37-92" aria-hidden="true" tabindex="-1"></a>anomalous_test_data <span class="ot">&lt;-</span>  baked_test_data <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="fu">get</span>(target_varible) <span class="sc">==</span> <span class="dv">0</span>)</span>
+<span id="cb37-93"><a href="#cb37-93" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb37-94"><a href="#cb37-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-95"><a href="#cb37-95" aria-hidden="true" tabindex="-1"></a><span class="fu"># See the data</span></span>
+<span id="cb37-96"><a href="#cb37-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-97"><a href="#cb37-97" aria-hidden="true" tabindex="-1"></a><span class="fu">## Normal ECG</span></span>
+<span id="cb37-98"><a href="#cb37-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-101"><a href="#cb37-101" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb37-102"><a href="#cb37-102" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot a normal ECG.</span></span>
+<span id="cb37-103"><a href="#cb37-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-104"><a href="#cb37-104" aria-hidden="true" tabindex="-1"></a>normal_train_data <span class="sc">|&gt;</span> </span>
+<span id="cb37-105"><a href="#cb37-105" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb37-106"><a href="#cb37-106" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>target_varible) <span class="sc">|&gt;</span></span>
+<span id="cb37-107"><a href="#cb37-107" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">name =</span> name <span class="sc">|&gt;</span> stringr<span class="sc">::</span><span class="fu">str_extract</span>(<span class="st">'</span><span class="sc">\\</span><span class="st">d+'</span>) <span class="sc">|&gt;</span> <span class="fu">as.numeric</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb37-108"><a href="#cb37-108" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> name,<span class="at">y =</span> value)) <span class="sc">+</span></span>
+<span id="cb37-109"><a href="#cb37-109" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb37-110"><a href="#cb37-110" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb37-111"><a href="#cb37-111" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'A Normal ECG'</span>,<span class="at">x =</span> <span class="cn">NULL</span>,<span class="at">y =</span> <span class="cn">NULL</span>)</span>
+<span id="cb37-112"><a href="#cb37-112" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb37-113"><a href="#cb37-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-114"><a href="#cb37-114" aria-hidden="true" tabindex="-1"></a><span class="fu">## Anomalous ECG</span></span>
+<span id="cb37-115"><a href="#cb37-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-118"><a href="#cb37-118" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb37-119"><a href="#cb37-119" aria-hidden="true" tabindex="-1"></a>anomalous_train_data <span class="sc">|&gt;</span> </span>
+<span id="cb37-120"><a href="#cb37-120" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb37-121"><a href="#cb37-121" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>target_varible) <span class="sc">|&gt;</span></span>
+<span id="cb37-122"><a href="#cb37-122" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">name =</span> name <span class="sc">|&gt;</span> stringr<span class="sc">::</span><span class="fu">str_extract</span>(<span class="st">'</span><span class="sc">\\</span><span class="st">d+'</span>) <span class="sc">|&gt;</span> <span class="fu">as.numeric</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb37-123"><a href="#cb37-123" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> name,<span class="at">y =</span> value)) <span class="sc">+</span></span>
+<span id="cb37-124"><a href="#cb37-124" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb37-125"><a href="#cb37-125" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb37-126"><a href="#cb37-126" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'A Anomalous ECG'</span>,<span class="at">x =</span> <span class="cn">NULL</span>,<span class="at">y =</span> <span class="cn">NULL</span>)</span>
+<span id="cb37-127"><a href="#cb37-127" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb37-128"><a href="#cb37-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-129"><a href="#cb37-129" aria-hidden="true" tabindex="-1"></a><span class="fu"># Create Matrixes for tensorflow</span></span>
+<span id="cb37-130"><a href="#cb37-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-133"><a href="#cb37-133" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb37-134"><a href="#cb37-134" aria-hidden="true" tabindex="-1"></a>normal_train_data_x <span class="ot">&lt;-</span> normal_train_data <span class="sc">|&gt;</span></span>
+<span id="cb37-135"><a href="#cb37-135" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>target_varible) <span class="sc">|&gt;</span> </span>
+<span id="cb37-136"><a href="#cb37-136" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.matrix</span>()</span>
+<span id="cb37-137"><a href="#cb37-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-138"><a href="#cb37-138" aria-hidden="true" tabindex="-1"></a>normal_test_data_x <span class="ot">&lt;-</span> normal_test_data <span class="sc">|&gt;</span></span>
+<span id="cb37-139"><a href="#cb37-139" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>target_varible) <span class="sc">|&gt;</span> </span>
+<span id="cb37-140"><a href="#cb37-140" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.matrix</span>()</span>
+<span id="cb37-141"><a href="#cb37-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-142"><a href="#cb37-142" aria-hidden="true" tabindex="-1"></a>test_data_x <span class="ot">&lt;-</span> baked_test_data <span class="sc">|&gt;</span> </span>
+<span id="cb37-143"><a href="#cb37-143" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>target_varible) <span class="sc">|&gt;</span> </span>
+<span id="cb37-144"><a href="#cb37-144" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.matrix</span>()</span>
+<span id="cb37-145"><a href="#cb37-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-146"><a href="#cb37-146" aria-hidden="true" tabindex="-1"></a>anomalous_test_data_x <span class="ot">&lt;-</span> anomalous_test_data <span class="sc">|&gt;</span> </span>
+<span id="cb37-147"><a href="#cb37-147" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>target_varible) <span class="sc">|&gt;</span> </span>
+<span id="cb37-148"><a href="#cb37-148" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.matrix</span>()</span>
+<span id="cb37-149"><a href="#cb37-149" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb37-150"><a href="#cb37-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-151"><a href="#cb37-151" aria-hidden="true" tabindex="-1"></a><span class="fu"># Build The Auto Encoder- Using the functional api</span></span>
+<span id="cb37-152"><a href="#cb37-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-153"><a href="#cb37-153" aria-hidden="true" tabindex="-1"></a><span class="fu">## Discover the input and output dimensions</span></span>
+<span id="cb37-154"><a href="#cb37-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-157"><a href="#cb37-157" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb37-158"><a href="#cb37-158" aria-hidden="true" tabindex="-1"></a><span class="co"># dim_features is the dimension of your features</span></span>
+<span id="cb37-159"><a href="#cb37-159" aria-hidden="true" tabindex="-1"></a>dim_features <span class="ot">&lt;-</span> normal_train_data <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>target_varible) <span class="sc">|&gt;</span> <span class="fu">ncol</span>()</span>
+<span id="cb37-160"><a href="#cb37-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-161"><a href="#cb37-161" aria-hidden="true" tabindex="-1"></a><span class="co"># latent dim is usually the smallest layer of the network at the end of the encoder model</span></span>
+<span id="cb37-162"><a href="#cb37-162" aria-hidden="true" tabindex="-1"></a>latent_dim <span class="ot">&lt;-</span> <span class="dv">8</span></span>
+<span id="cb37-163"><a href="#cb37-163" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb37-164"><a href="#cb37-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-165"><a href="#cb37-165" aria-hidden="true" tabindex="-1"></a><span class="fu">## Define the encoder</span></span>
+<span id="cb37-166"><a href="#cb37-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-169"><a href="#cb37-169" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb37-170"><a href="#cb37-170" aria-hidden="true" tabindex="-1"></a><span class="co">#|warning: false</span></span>
+<span id="cb37-171"><a href="#cb37-171" aria-hidden="true" tabindex="-1"></a>encoder_input <span class="ot">&lt;-</span> <span class="fu">layer_input</span>(<span class="at">shape =</span> <span class="fu">c</span>(dim_features), <span class="at">name =</span> <span class="st">"features"</span>)</span>
+<span id="cb37-172"><a href="#cb37-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-173"><a href="#cb37-173" aria-hidden="true" tabindex="-1"></a>encoder_output <span class="ot">&lt;-</span> encoder_input <span class="sc">|&gt;</span> </span>
+<span id="cb37-174"><a href="#cb37-174" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="dv">32</span>,<span class="at">activation =</span> <span class="st">"relu"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb37-175"><a href="#cb37-175" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="dv">16</span>,<span class="at">activation =</span> <span class="st">"relu"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb37-176"><a href="#cb37-176" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(latent_dim,<span class="at">activation =</span> <span class="st">"relu"</span>)</span>
+<span id="cb37-177"><a href="#cb37-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-178"><a href="#cb37-178" aria-hidden="true" tabindex="-1"></a>encoder <span class="ot">&lt;-</span> <span class="fu">keras_model</span>(encoder_input, encoder_output, <span class="at">name =</span> <span class="st">"encoder"</span>)</span>
+<span id="cb37-179"><a href="#cb37-179" aria-hidden="true" tabindex="-1"></a>encoder</span>
+<span id="cb37-180"><a href="#cb37-180" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb37-181"><a href="#cb37-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-182"><a href="#cb37-182" aria-hidden="true" tabindex="-1"></a><span class="fu">## Define Decoder</span></span>
+<span id="cb37-183"><a href="#cb37-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-186"><a href="#cb37-186" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb37-187"><a href="#cb37-187" aria-hidden="true" tabindex="-1"></a>decoder_input <span class="ot">&lt;-</span> <span class="fu">layer_input</span>(<span class="at">shape =</span> <span class="fu">c</span>(latent_dim), <span class="at">name =</span> <span class="st">"latent_dim"</span>)</span>
+<span id="cb37-188"><a href="#cb37-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-189"><a href="#cb37-189" aria-hidden="true" tabindex="-1"></a>decoder_output <span class="ot">&lt;-</span> decoder_input <span class="sc">|&gt;</span> </span>
+<span id="cb37-190"><a href="#cb37-190" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="dv">16</span>,<span class="at">activation =</span> <span class="st">"relu"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb37-191"><a href="#cb37-191" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="dv">32</span>,<span class="at">activation =</span> <span class="st">"relu"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb37-192"><a href="#cb37-192" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(dim_features,<span class="at">activation =</span> <span class="st">"sigmoid"</span>)</span>
+<span id="cb37-193"><a href="#cb37-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-194"><a href="#cb37-194" aria-hidden="true" tabindex="-1"></a>decoder <span class="ot">&lt;-</span> <span class="fu">keras_model</span>(decoder_input, decoder_output, <span class="at">name =</span> <span class="st">"decoder"</span>)</span>
+<span id="cb37-195"><a href="#cb37-195" aria-hidden="true" tabindex="-1"></a>decoder</span>
+<span id="cb37-196"><a href="#cb37-196" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb37-197"><a href="#cb37-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-198"><a href="#cb37-198" aria-hidden="true" tabindex="-1"></a><span class="fu">## Define The Auto Encoder</span></span>
+<span id="cb37-199"><a href="#cb37-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-202"><a href="#cb37-202" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb37-203"><a href="#cb37-203" aria-hidden="true" tabindex="-1"></a>encoded <span class="ot">&lt;-</span> <span class="fu">encoder</span>(encoder_input)</span>
+<span id="cb37-204"><a href="#cb37-204" aria-hidden="true" tabindex="-1"></a>decoded <span class="ot">&lt;-</span> <span class="fu">decoder</span>(encoded)</span>
+<span id="cb37-205"><a href="#cb37-205" aria-hidden="true" tabindex="-1"></a>autoencoder <span class="ot">&lt;-</span> <span class="fu">keras_model</span>(encoder_input, decoded,</span>
+<span id="cb37-206"><a href="#cb37-206" aria-hidden="true" tabindex="-1"></a>                           <span class="at">name =</span> <span class="st">"autoencoder"</span>)</span>
+<span id="cb37-207"><a href="#cb37-207" aria-hidden="true" tabindex="-1"></a>autoencoder</span>
+<span id="cb37-208"><a href="#cb37-208" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb37-209"><a href="#cb37-209" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-210"><a href="#cb37-210" aria-hidden="true" tabindex="-1"></a><span class="fu">## Fit the model</span></span>
+<span id="cb37-211"><a href="#cb37-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-214"><a href="#cb37-214" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb37-215"><a href="#cb37-215" aria-hidden="true" tabindex="-1"></a>history <span class="ot">&lt;-</span> autoencoder <span class="sc">|&gt;</span></span>
+<span id="cb37-216"><a href="#cb37-216" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compile</span>(<span class="at">loss =</span> <span class="st">"mae"</span>,</span>
+<span id="cb37-217"><a href="#cb37-217" aria-hidden="true" tabindex="-1"></a>          <span class="at">optimizer =</span> <span class="st">"adam"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb37-218"><a href="#cb37-218" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(</span>
+<span id="cb37-219"><a href="#cb37-219" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> normal_train_data_x,</span>
+<span id="cb37-220"><a href="#cb37-220" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> normal_train_data_x,</span>
+<span id="cb37-221"><a href="#cb37-221" aria-hidden="true" tabindex="-1"></a>    <span class="at">epochs =</span> <span class="dv">20</span>,</span>
+<span id="cb37-222"><a href="#cb37-222" aria-hidden="true" tabindex="-1"></a>    <span class="at">batch_size =</span> <span class="dv">512</span>,</span>
+<span id="cb37-223"><a href="#cb37-223" aria-hidden="true" tabindex="-1"></a>    <span class="at">validation_data =</span> <span class="fu">list</span>(</span>
+<span id="cb37-224"><a href="#cb37-224" aria-hidden="true" tabindex="-1"></a>      test_data_x,</span>
+<span id="cb37-225"><a href="#cb37-225" aria-hidden="true" tabindex="-1"></a>      test_data_x</span>
+<span id="cb37-226"><a href="#cb37-226" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb37-227"><a href="#cb37-227" aria-hidden="true" tabindex="-1"></a>    <span class="at">shuffle =</span> <span class="cn">TRUE</span></span>
+<span id="cb37-228"><a href="#cb37-228" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb37-229"><a href="#cb37-229" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb37-230"><a href="#cb37-230" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-233"><a href="#cb37-233" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb37-234"><a href="#cb37-234" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(history)</span>
+<span id="cb37-235"><a href="#cb37-235" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb37-236"><a href="#cb37-236" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-237"><a href="#cb37-237" aria-hidden="true" tabindex="-1"></a><span class="fu"># Plot the predictions</span></span>
+<span id="cb37-238"><a href="#cb37-238" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-239"><a href="#cb37-239" aria-hidden="true" tabindex="-1"></a><span class="fu">## Reconstruction on Normal data</span></span>
+<span id="cb37-240"><a href="#cb37-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-243"><a href="#cb37-243" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb37-244"><a href="#cb37-244" aria-hidden="true" tabindex="-1"></a>encoded_data <span class="ot">&lt;-</span> encoder <span class="sc">|&gt;</span></span>
+<span id="cb37-245"><a href="#cb37-245" aria-hidden="true" tabindex="-1"></a>  <span class="fu">predict</span>(normal_test_data_x)</span>
+<span id="cb37-246"><a href="#cb37-246" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-247"><a href="#cb37-247" aria-hidden="true" tabindex="-1"></a>decoded_data <span class="ot">&lt;-</span> decoder <span class="sc">|&gt;</span> </span>
+<span id="cb37-248"><a href="#cb37-248" aria-hidden="true" tabindex="-1"></a>  <span class="fu">predict</span>(encoded_data)</span>
+<span id="cb37-249"><a href="#cb37-249" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-250"><a href="#cb37-250" aria-hidden="true" tabindex="-1"></a>decoded_data_to_plot <span class="ot">&lt;-</span> decoded_data <span class="sc">|&gt;</span> </span>
+<span id="cb37-251"><a href="#cb37-251" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb37-252"><a href="#cb37-252" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb37-253"><a href="#cb37-253" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(),<span class="at">values_to =</span> <span class="st">'Reconstruction'</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb37-254"><a href="#cb37-254" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">name =</span> name <span class="sc">|&gt;</span> stringr<span class="sc">::</span><span class="fu">str_extract</span>(<span class="st">'</span><span class="sc">\\</span><span class="st">d+'</span>) <span class="sc">|&gt;</span> <span class="fu">as.numeric</span>())</span>
+<span id="cb37-255"><a href="#cb37-255" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-256"><a href="#cb37-256" aria-hidden="true" tabindex="-1"></a>normal_test_data_to_plot <span class="ot">&lt;-</span> normal_test_data_x <span class="sc">|&gt;</span></span>
+<span id="cb37-257"><a href="#cb37-257" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb37-258"><a href="#cb37-258" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb37-259"><a href="#cb37-259" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(),<span class="at">values_to =</span> <span class="st">'Input'</span>)<span class="sc">|&gt;</span> </span>
+<span id="cb37-260"><a href="#cb37-260" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">name =</span> name <span class="sc">|&gt;</span> stringr<span class="sc">::</span><span class="fu">str_extract</span>(<span class="st">'</span><span class="sc">\\</span><span class="st">d+'</span>)<span class="sc">|&gt;</span> <span class="fu">as.numeric</span>())</span>
+<span id="cb37-261"><a href="#cb37-261" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-262"><a href="#cb37-262" aria-hidden="true" tabindex="-1"></a>data_to_plot <span class="ot">&lt;-</span> decoded_data_to_plot <span class="sc">|&gt;</span> </span>
+<span id="cb37-263"><a href="#cb37-263" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(normal_test_data_to_plot,<span class="at">by =</span> <span class="st">'name'</span>)</span>
+<span id="cb37-264"><a href="#cb37-264" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-265"><a href="#cb37-265" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-266"><a href="#cb37-266" aria-hidden="true" tabindex="-1"></a>data_to_plot <span class="sc">|&gt;</span></span>
+<span id="cb37-267"><a href="#cb37-267" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>name,<span class="at">names_to =</span> <span class="st">'source'</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb37-268"><a href="#cb37-268" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> name,<span class="at">y =</span> value,<span class="at">colour =</span> source,<span class="at">group =</span> source)) <span class="sc">+</span> </span>
+<span id="cb37-269"><a href="#cb37-269" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb37-270"><a href="#cb37-270" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb37-271"><a href="#cb37-271" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Recontruction on test data'</span>,<span class="at">x =</span> <span class="cn">NULL</span>,<span class="at">y=</span><span class="cn">NULL</span>)</span>
+<span id="cb37-272"><a href="#cb37-272" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-273"><a href="#cb37-273" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb37-274"><a href="#cb37-274" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-275"><a href="#cb37-275" aria-hidden="true" tabindex="-1"></a><span class="fu">## Reconstruction on Anomalous data</span></span>
+<span id="cb37-276"><a href="#cb37-276" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-277"><a href="#cb37-277" aria-hidden="true" tabindex="-1"></a>It is clear that the reconstruction can't quite create the output, this is what we will exploit to define outliers.</span>
+<span id="cb37-278"><a href="#cb37-278" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-281"><a href="#cb37-281" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb37-282"><a href="#cb37-282" aria-hidden="true" tabindex="-1"></a>encoded_data <span class="ot">&lt;-</span> encoder <span class="sc">|&gt;</span></span>
+<span id="cb37-283"><a href="#cb37-283" aria-hidden="true" tabindex="-1"></a>  <span class="fu">predict</span>(anomalous_test_data_x)</span>
+<span id="cb37-284"><a href="#cb37-284" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-285"><a href="#cb37-285" aria-hidden="true" tabindex="-1"></a>decoded_data <span class="ot">&lt;-</span> decoder <span class="sc">|&gt;</span> </span>
+<span id="cb37-286"><a href="#cb37-286" aria-hidden="true" tabindex="-1"></a>  <span class="fu">predict</span>(encoded_data)</span>
+<span id="cb37-287"><a href="#cb37-287" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-288"><a href="#cb37-288" aria-hidden="true" tabindex="-1"></a>decoded_data_to_plot <span class="ot">&lt;-</span> decoded_data <span class="sc">|&gt;</span> </span>
+<span id="cb37-289"><a href="#cb37-289" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb37-290"><a href="#cb37-290" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb37-291"><a href="#cb37-291" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(),<span class="at">values_to =</span> <span class="st">'Reconstruction'</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb37-292"><a href="#cb37-292" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">name =</span> name <span class="sc">|&gt;</span> stringr<span class="sc">::</span><span class="fu">str_extract</span>(<span class="st">'</span><span class="sc">\\</span><span class="st">d+'</span>) <span class="sc">|&gt;</span> <span class="fu">as.numeric</span>())</span>
+<span id="cb37-293"><a href="#cb37-293" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-294"><a href="#cb37-294" aria-hidden="true" tabindex="-1"></a>normal_test_data_to_plot <span class="ot">&lt;-</span> anomalous_test_data_x <span class="sc">|&gt;</span></span>
+<span id="cb37-295"><a href="#cb37-295" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb37-296"><a href="#cb37-296" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb37-297"><a href="#cb37-297" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(),<span class="at">values_to =</span> <span class="st">'Input'</span>)<span class="sc">|&gt;</span> </span>
+<span id="cb37-298"><a href="#cb37-298" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">name =</span> name <span class="sc">|&gt;</span> stringr<span class="sc">::</span><span class="fu">str_extract</span>(<span class="st">'</span><span class="sc">\\</span><span class="st">d+'</span>)<span class="sc">|&gt;</span> <span class="fu">as.numeric</span>())</span>
+<span id="cb37-299"><a href="#cb37-299" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-300"><a href="#cb37-300" aria-hidden="true" tabindex="-1"></a>data_to_plot <span class="ot">&lt;-</span> decoded_data_to_plot <span class="sc">|&gt;</span> </span>
+<span id="cb37-301"><a href="#cb37-301" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(normal_test_data_to_plot,<span class="at">by =</span> <span class="st">'name'</span>)</span>
+<span id="cb37-302"><a href="#cb37-302" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-303"><a href="#cb37-303" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-304"><a href="#cb37-304" aria-hidden="true" tabindex="-1"></a>data_to_plot <span class="sc">|&gt;</span></span>
+<span id="cb37-305"><a href="#cb37-305" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>name,<span class="at">names_to =</span> <span class="st">'source'</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb37-306"><a href="#cb37-306" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> name,<span class="at">y =</span> value,<span class="at">colour =</span> source,<span class="at">group =</span> source)) <span class="sc">+</span> </span>
+<span id="cb37-307"><a href="#cb37-307" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb37-308"><a href="#cb37-308" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb37-309"><a href="#cb37-309" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Recontruction on Anomalous test data'</span>,<span class="at">x =</span> <span class="cn">NULL</span>,<span class="at">y=</span><span class="cn">NULL</span>)</span>
+<span id="cb37-310"><a href="#cb37-310" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb37-311"><a href="#cb37-311" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-312"><a href="#cb37-312" aria-hidden="true" tabindex="-1"></a><span class="fu"># Detect anomalies</span></span>
+<span id="cb37-313"><a href="#cb37-313" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-314"><a href="#cb37-314" aria-hidden="true" tabindex="-1"></a><span class="fu">## Discover the threshold to flag annomalies</span></span>
+<span id="cb37-315"><a href="#cb37-315" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-318"><a href="#cb37-318" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb37-319"><a href="#cb37-319" aria-hidden="true" tabindex="-1"></a>reconstructions <span class="ot">&lt;-</span>  autoencoder <span class="sc">|&gt;</span> <span class="fu">predict</span>(normal_train_data_x) <span class="sc">|&gt;</span> <span class="fu">as_tibble</span>()</span>
+<span id="cb37-320"><a href="#cb37-320" aria-hidden="true" tabindex="-1"></a>train_data_tibble <span class="ot">&lt;-</span> normal_train_data_x <span class="sc">|&gt;</span> <span class="fu">as_tibble</span>()</span>
+<span id="cb37-321"><a href="#cb37-321" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-322"><a href="#cb37-322" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-323"><a href="#cb37-323" aria-hidden="true" tabindex="-1"></a>train_loss <span class="ot">=</span> <span class="fu">loss_mean_squared_error</span>(reconstructions, train_data_tibble)</span>
+<span id="cb37-324"><a href="#cb37-324" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-325"><a href="#cb37-325" aria-hidden="true" tabindex="-1"></a>data_loss <span class="ot">&lt;-</span> train_loss <span class="sc">|&gt;</span> <span class="fu">as.numeric</span>() <span class="sc">|&gt;</span> <span class="fu">as_tibble</span>()</span>
+<span id="cb37-326"><a href="#cb37-326" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-327"><a href="#cb37-327" aria-hidden="true" tabindex="-1"></a>data_loss <span class="sc">|&gt;</span> </span>
+<span id="cb37-328"><a href="#cb37-328" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> value)) <span class="sc">+</span></span>
+<span id="cb37-329"><a href="#cb37-329" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">50</span>) <span class="sc">+</span></span>
+<span id="cb37-330"><a href="#cb37-330" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Loss Normal Train Data'</span>,<span class="at">x =</span> <span class="st">'Train Loss'</span>, <span class="at">y =</span> <span class="st">'No of examples'</span>) <span class="sc">+</span></span>
+<span id="cb37-331"><a href="#cb37-331" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb37-332"><a href="#cb37-332" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb37-333"><a href="#cb37-333" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-336"><a href="#cb37-336" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb37-337"><a href="#cb37-337" aria-hidden="true" tabindex="-1"></a>threshold <span class="ot">&lt;-</span><span class="fu">mean</span>(train_loss) <span class="sc">+</span> <span class="fu">sd</span>(train_loss)</span>
+<span id="cb37-338"><a href="#cb37-338" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-339"><a href="#cb37-339" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(threshold <span class="sc">|&gt;</span> <span class="fu">as.numeric</span>())</span>
+<span id="cb37-340"><a href="#cb37-340" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb37-341"><a href="#cb37-341" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-342"><a href="#cb37-342" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb37-343"><a href="#cb37-343" aria-hidden="true" tabindex="-1"></a><span class="fu">## Completness</span></span>
+<span id="cb37-344"><a href="#cb37-344" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-345"><a href="#cb37-345" aria-hidden="true" tabindex="-1"></a>There are other strategies you could use to select a threshold value above which test examples should be classified as anomalous, the correct approach will depend on your dataset. You can learn more with the links at the end of this tutorial.</span>
+<span id="cb37-346"><a href="#cb37-346" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb37-347"><a href="#cb37-347" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-348"><a href="#cb37-348" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
+<span id="cb37-349"><a href="#cb37-349" aria-hidden="true" tabindex="-1"></a><span class="fu">## Strategy</span></span>
+<span id="cb37-350"><a href="#cb37-350" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-351"><a href="#cb37-351" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb37-352"><a href="#cb37-352" aria-hidden="true" tabindex="-1"></a>If you examine the reconstruction error for the anomalous examples in the test set, you'll notice most have greater reconstruction error than the threshold. By varing the threshold, you can adjust the precision and recall of your classifier.</span>
+<span id="cb37-353"><a href="#cb37-353" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb37-354"><a href="#cb37-354" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb37-355"><a href="#cb37-355" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-356"><a href="#cb37-356" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
+<span id="cb37-357"><a href="#cb37-357" aria-hidden="true" tabindex="-1"></a><span class="fu">## tidy.outliers</span></span>
+<span id="cb37-358"><a href="#cb37-358" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-359"><a href="#cb37-359" aria-hidden="true" tabindex="-1"></a>If you need something faster, and usually more practical do check out my package tidy.outliers for easy to use outlier detection methods.</span>
+<span id="cb37-360"><a href="#cb37-360" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb37-361"><a href="#cb37-361" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-364"><a href="#cb37-364" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb37-365"><a href="#cb37-365" aria-hidden="true" tabindex="-1"></a>reconstructions <span class="ot">&lt;-</span>  autoencoder <span class="sc">|&gt;</span> <span class="fu">predict</span>(anomalous_test_data_x) <span class="sc">|&gt;</span> <span class="fu">as_tibble</span>()</span>
+<span id="cb37-366"><a href="#cb37-366" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-367"><a href="#cb37-367" aria-hidden="true" tabindex="-1"></a>anomalous_test_data_x_tibble <span class="ot">&lt;-</span> anomalous_test_data_x <span class="sc">|&gt;</span> <span class="fu">as_tibble</span>()</span>
+<span id="cb37-368"><a href="#cb37-368" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-369"><a href="#cb37-369" aria-hidden="true" tabindex="-1"></a>test_loss <span class="ot">=</span> <span class="fu">loss_mean_squared_error</span>(reconstructions, anomalous_test_data_x_tibble)</span>
+<span id="cb37-370"><a href="#cb37-370" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-371"><a href="#cb37-371" aria-hidden="true" tabindex="-1"></a>data_loss <span class="ot">&lt;-</span> test_loss <span class="sc">|&gt;</span> <span class="fu">as.numeric</span>() <span class="sc">|&gt;</span> <span class="fu">as_tibble</span>()</span>
+<span id="cb37-372"><a href="#cb37-372" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-373"><a href="#cb37-373" aria-hidden="true" tabindex="-1"></a>data_loss <span class="sc">|&gt;</span> </span>
+<span id="cb37-374"><a href="#cb37-374" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> value)) <span class="sc">+</span></span>
+<span id="cb37-375"><a href="#cb37-375" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">50</span>) <span class="sc">+</span></span>
+<span id="cb37-376"><a href="#cb37-376" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Loss Anomalous Test Data'</span>,<span class="at">x =</span> <span class="st">'Test Loss'</span>, <span class="at">y =</span> <span class="st">'No of examples'</span>) <span class="sc">+</span></span>
+<span id="cb37-377"><a href="#cb37-377" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb37-378"><a href="#cb37-378" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb37-379"><a href="#cb37-379" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-380"><a href="#cb37-380" aria-hidden="true" tabindex="-1"></a><span class="fu">## Classify anomalies</span></span>
+<span id="cb37-381"><a href="#cb37-381" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-384"><a href="#cb37-384" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb37-385"><a href="#cb37-385" aria-hidden="true" tabindex="-1"></a>predict_outlier <span class="ot">&lt;-</span> <span class="cf">function</span>(model,data,threshold){</span>
+<span id="cb37-386"><a href="#cb37-386" aria-hidden="true" tabindex="-1"></a>  reconstructions <span class="ot">&lt;-</span>  model <span class="sc">|&gt;</span> <span class="fu">predict</span>(data)</span>
+<span id="cb37-387"><a href="#cb37-387" aria-hidden="true" tabindex="-1"></a>  loss <span class="ot">&lt;-</span>  <span class="fu">loss_mean_squared_error</span>(reconstructions, data)</span>
+<span id="cb37-388"><a href="#cb37-388" aria-hidden="true" tabindex="-1"></a>  df_result <span class="ot">&lt;-</span> <span class="fu">k_less</span>(loss,threshold) <span class="sc">|&gt;</span></span>
+<span id="cb37-389"><a href="#cb37-389" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.numeric</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb37-390"><a href="#cb37-390" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.factor</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb37-391"><a href="#cb37-391" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb37-392"><a href="#cb37-392" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">estimate =</span> value)</span>
+<span id="cb37-393"><a href="#cb37-393" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(df_result)</span>
+<span id="cb37-394"><a href="#cb37-394" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb37-395"><a href="#cb37-395" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-396"><a href="#cb37-396" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> <span class="fu">predict_outlier</span>(autoencoder,anomalous_test_data_x,threshold)</span>
+<span id="cb37-397"><a href="#cb37-397" aria-hidden="true" tabindex="-1"></a>test_data <span class="ot">&lt;-</span> anomalous_test_data <span class="sc">|&gt;</span></span>
+<span id="cb37-398"><a href="#cb37-398" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(target_varible) <span class="sc">|&gt;</span> </span>
+<span id="cb37-399"><a href="#cb37-399" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">truth =</span> target_varible) <span class="sc">|&gt;</span> </span>
+<span id="cb37-400"><a href="#cb37-400" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">truth =</span> truth <span class="sc">|&gt;</span> <span class="fu">factor</span>(<span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)))</span>
+<span id="cb37-401"><a href="#cb37-401" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-402"><a href="#cb37-402" aria-hidden="true" tabindex="-1"></a>df_result <span class="ot">&lt;-</span> test_data <span class="sc">|&gt;</span> </span>
+<span id="cb37-403"><a href="#cb37-403" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(preds)</span>
+<span id="cb37-404"><a href="#cb37-404" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-405"><a href="#cb37-405" aria-hidden="true" tabindex="-1"></a>df_result <span class="sc">|&gt;</span> </span>
+<span id="cb37-406"><a href="#cb37-406" aria-hidden="true" tabindex="-1"></a>  yardstick<span class="sc">::</span><span class="fu">accuracy</span>(<span class="at">truth =</span> truth,<span class="at">estimate =</span> estimate)</span>
+<span id="cb37-407"><a href="#cb37-407" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-408"><a href="#cb37-408" aria-hidden="true" tabindex="-1"></a>df_result <span class="sc">|&gt;</span> </span>
+<span id="cb37-409"><a href="#cb37-409" aria-hidden="true" tabindex="-1"></a>  yardstick<span class="sc">::</span><span class="fu">precision</span>(<span class="at">truth =</span> truth,<span class="at">estimate =</span> estimate)</span>
+<span id="cb37-410"><a href="#cb37-410" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-411"><a href="#cb37-411" aria-hidden="true" tabindex="-1"></a>df_result <span class="sc">|&gt;</span> </span>
+<span id="cb37-412"><a href="#cb37-412" aria-hidden="true" tabindex="-1"></a>  yardstick<span class="sc">::</span><span class="fu">recall</span>(<span class="at">truth =</span> truth,<span class="at">estimate =</span> estimate)</span>
+<span id="cb37-413"><a href="#cb37-413" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb37-414"><a href="#cb37-414" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-415"><a href="#cb37-415" aria-hidden="true" tabindex="-1"></a><span class="fu"># Next Steps</span></span>
+<span id="cb37-416"><a href="#cb37-416" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-417"><a href="#cb37-417" aria-hidden="true" tabindex="-1"></a>Check out the <span class="co">[</span><span class="ot">Tensorflow Next Steps</span><span class="co">](https://www.tensorflow.org/tutorials/generative/autoencoder#next_steps "Tensorflow Next Steps")</span></span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+<footer class="footer"><div class="nav-footer">
+    <div class="nav-footer-right">This blog is built with ❤️ and <a href="https://quarto.org/">Quarto</a>.</div>
+  </div>
+</footer>
+
+
+</body></html>

@@ -1,0 +1,38 @@
+project:
+  type: website
+
+website:
+  title: "Bruno Testaguzza Carlin"
+  twitter-card:
+    creator: "@BrunoTestaguzza"
+    site: "@brunocarlin"
+  open-graph: true
+  navbar:
+    left:
+      - href: index.qmd
+      - href: about.qmd
+      - href: blog.qmd
+    right:
+      - icon: github
+        href: https://github.com/
+        aria-label: GitHub
+  page-footer:
+    right: "This blog is built with ❤️ and [Quarto](https://quarto.org/)."
+  google-analytics: "G-V18SLYYHQJ"
+  site-url: https://carlin.quarto.pub/bruno-testaguzza-carlin
+  description: "The Site of Bruno Testaguzza Carlin"
+
+format:
+  html:
+    highlight-style: a11y
+    theme:
+      light: [flatly]
+      dark: [darkly]
+    
+    mainfont: "Atkinson Hyperlegible"
+    code-copy: true
+    code-overflow: wrap
+    toc: true
+
+editor: visual
+

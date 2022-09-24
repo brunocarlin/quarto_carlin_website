@@ -1,0 +1,11 @@
+---
+title: "Welcome to my site"
+---
+
+This is a Quarto website.
+
+To learn more about Quarto websites visit <https://quarto.org/docs/websites>
+
+Feel free to ask any question on the comments or on any of my social media links.
+
+![](imgs/random/gato.jpg)

@@ -1,0 +1,379 @@
+---
+title: "Functional Auto Encoder with R Keras"
+author: "Bruno Testaguzza Carlin"
+image: "autoencoder.png"
+toc: true
+df-print: paged
+code-tools: true
+code-fold: show
+code-link: true
+categories: [tidymodels,tensorflow,code]
+---
+
+# Objective
+
+This is a somewhat simple post trying to mimic the guides on auto encoders present in [Third example: Anomaly detection](https://www.tensorflow.org/tutorials/generative/autoencoder#third_example_anomaly_detection "Third example: Anomaly detection")
+
+# Libraries
+
+Do keep in mind that in order to use tensorflow you should run
+
+``` r
+tensorflow::install_tensorflow()
+```
+
+```{r,warning=FALSE}
+library(keras)
+library(rsample) |> suppressMessages()
+library(recipes) |> suppressMessages()
+library(ggplot2)
+library(tidyr)
+```
+
+# Download The Dataset
+
+```{r}
+dataframe <-  readr::read_csv('http://storage.googleapis.com/download.tensorflow.org/data/ecg.csv',col_names = FALSE)
+dataframe |> head()
+raw_data <- dataframe
+```
+
+# Preprocessing
+
+## Split the data
+
+```{r}
+set.seed(20)
+
+raw_data_split <- initial_split(raw_data,prop = .8)
+
+train_data <- training(raw_data_split)
+
+test_data <- testing(raw_data_split)
+```
+
+## Normalize the data to \[0,1\].
+
+```{r}
+target_varible <- raw_data[,ncol(raw_data)] |> names()
+
+recipe_data <- recipe(train_data) |> 
+  update_role(target_varible,new_role = 'outcome') |> 
+  update_role(-target_varible,new_role = 'predictor') |> 
+  step_range(all_predictors(),min = 0,max = 1)
+
+preped_recipe_data <- recipe_data |> prep(train_data)
+
+baked_train_data <- preped_recipe_data |> bake(new_data = NULL)
+baked_test_data <- preped_recipe_data |> bake(test_data)
+```
+
+## Separate datasets for future usage
+
+You will train the autoencoder using only the normal rhythms
+
+Which are labeled in this dataset as 1.
+
+Separate the normal rhythms from the abnormal rhythms.
+
+```{r}
+normal_train_data <-  baked_train_data |> filter(get(target_varible) == 1)
+normal_test_data <-  baked_test_data |> filter(get(target_varible) == 1)
+
+anomalous_train_data <-  baked_train_data |> filter(get(target_varible) == 0)
+anomalous_test_data <-  baked_test_data |> filter(get(target_varible) == 0)
+```
+
+# See the data
+
+## Normal ECG
+
+```{r}
+# Plot a normal ECG.
+
+normal_train_data |> 
+  head(1) |>
+  pivot_longer(-target_varible) |>
+  mutate(name = name |> stringr::str_extract('\\d+') |> as.numeric()) |> 
+  ggplot(aes(x = name,y = value)) +
+  geom_line() +
+  theme_minimal() +
+  labs(title = 'A Normal ECG',x = NULL,y = NULL)
+```
+
+## Anomalous ECG
+
+```{r}
+anomalous_train_data |> 
+  head(1) |>
+  pivot_longer(-target_varible) |>
+  mutate(name = name |> stringr::str_extract('\\d+') |> as.numeric()) |> 
+  ggplot(aes(x = name,y = value)) +
+  geom_line() +
+  theme_minimal() +
+  labs(title = 'A Anomalous ECG',x = NULL,y = NULL)
+```
+
+# Create Matrixes for tensorflow
+
+```{r}
+normal_train_data_x <- normal_train_data |>
+  select(-target_varible) |> 
+  as.matrix()
+
+normal_test_data_x <- normal_test_data |>
+  select(-target_varible) |> 
+  as.matrix()
+
+test_data_x <- baked_test_data |> 
+  select(-target_varible) |> 
+  as.matrix()
+
+anomalous_test_data_x <- anomalous_test_data |> 
+  select(-target_varible) |> 
+  as.matrix()
+```
+
+# Build The Auto Encoder- Using the functional api
+
+## Discover the input and output dimensions
+
+```{r}
+# dim_features is the dimension of your features
+dim_features <- normal_train_data |> select(-target_varible) |> ncol()
+
+# latent dim is usually the smallest layer of the network at the end of the encoder model
+latent_dim <- 8
+```
+
+## Define the encoder
+
+```{r}
+#|warning: false
+encoder_input <- layer_input(shape = c(dim_features), name = "features")
+
+encoder_output <- encoder_input |> 
+  layer_dense(32,activation = "relu") |> 
+  layer_dense(16,activation = "relu") |>
+  layer_dense(latent_dim,activation = "relu")
+
+encoder <- keras_model(encoder_input, encoder_output, name = "encoder")
+encoder
+```
+
+## Define Decoder
+
+```{r}
+decoder_input <- layer_input(shape = c(latent_dim), name = "latent_dim")
+
+decoder_output <- decoder_input |> 
+  layer_dense(16,activation = "relu") |> 
+  layer_dense(32,activation = "relu") |>
+  layer_dense(dim_features,activation = "sigmoid")
+
+decoder <- keras_model(decoder_input, decoder_output, name = "decoder")
+decoder
+```
+
+## Define The Auto Encoder
+
+```{r}
+encoded <- encoder(encoder_input)
+decoded <- decoder(encoded)
+autoencoder <- keras_model(encoder_input, decoded,
+                           name = "autoencoder")
+autoencoder
+```
+
+## Fit the model
+
+```{r}
+history <- autoencoder |>
+  compile(loss = "mae",
+          optimizer = "adam") |>
+  fit(
+    x = normal_train_data_x,
+    y = normal_train_data_x,
+    epochs = 20,
+    batch_size = 512,
+    validation_data = list(
+      test_data_x,
+      test_data_x
+    ),
+    shuffle = TRUE
+  )
+```
+
+```{r}
+plot(history)
+```
+
+# Plot the predictions
+
+## Reconstruction on Normal data
+
+```{r}
+encoded_data <- encoder |>
+  predict(normal_test_data_x)
+
+decoded_data <- decoder |> 
+  predict(encoded_data)
+
+decoded_data_to_plot <- decoded_data |> 
+  head(1) |>
+  as_tibble() |> 
+  pivot_longer(everything(),values_to = 'Reconstruction') |> 
+  mutate(name = name |> stringr::str_extract('\\d+') |> as.numeric())
+
+normal_test_data_to_plot <- normal_test_data_x |>
+  head(1) |>
+  as_tibble() |> 
+  pivot_longer(everything(),values_to = 'Input')|> 
+  mutate(name = name |> stringr::str_extract('\\d+')|> as.numeric())
+
+data_to_plot <- decoded_data_to_plot |> 
+  left_join(normal_test_data_to_plot,by = 'name')
+
+
+data_to_plot |>
+  pivot_longer(cols = -name,names_to = 'source') |> 
+  ggplot(aes(x = name,y = value,colour = source,group = source)) + 
+  geom_line() +
+  theme_minimal() +
+  labs(title = 'Recontruction on test data',x = NULL,y=NULL)
+
+```
+
+## Reconstruction on Anomalous data
+
+It is clear that the reconstruction can't quite create the output, this is what we will exploit to define outliers.
+
+```{r}
+encoded_data <- encoder |>
+  predict(anomalous_test_data_x)
+
+decoded_data <- decoder |> 
+  predict(encoded_data)
+
+decoded_data_to_plot <- decoded_data |> 
+  head(1) |>
+  as_tibble() |> 
+  pivot_longer(everything(),values_to = 'Reconstruction') |> 
+  mutate(name = name |> stringr::str_extract('\\d+') |> as.numeric())
+
+normal_test_data_to_plot <- anomalous_test_data_x |>
+  head(1) |>
+  as_tibble() |> 
+  pivot_longer(everything(),values_to = 'Input')|> 
+  mutate(name = name |> stringr::str_extract('\\d+')|> as.numeric())
+
+data_to_plot <- decoded_data_to_plot |> 
+  left_join(normal_test_data_to_plot,by = 'name')
+
+
+data_to_plot |>
+  pivot_longer(cols = -name,names_to = 'source') |> 
+  ggplot(aes(x = name,y = value,colour = source,group = source)) + 
+  geom_line() +
+  theme_minimal() +
+  labs(title = 'Recontruction on Anomalous test data',x = NULL,y=NULL)
+```
+
+# Detect anomalies
+
+## Discover the threshold to flag annomalies
+
+```{r}
+reconstructions <-  autoencoder |> predict(normal_train_data_x) |> as_tibble()
+train_data_tibble <- normal_train_data_x |> as_tibble()
+
+
+train_loss = loss_mean_squared_error(reconstructions, train_data_tibble)
+
+data_loss <- train_loss |> as.numeric() |> as_tibble()
+
+data_loss |> 
+  ggplot(aes(x = value)) +
+  geom_histogram(bins = 50) +
+  labs(title = 'Loss Normal Train Data',x = 'Train Loss', y = 'No of examples') +
+  theme_minimal()
+```
+
+```{r}
+threshold <-mean(train_loss) + sd(train_loss)
+
+print(threshold |> as.numeric())
+```
+
+::: callout-note
+## Completness
+
+There are other strategies you could use to select a threshold value above which test examples should be classified as anomalous, the correct approach will depend on your dataset. You can learn more with the links at the end of this tutorial.
+:::
+
+::: callout-tip
+## Strategy
+
+::: callout-note
+If you examine the reconstruction error for the anomalous examples in the test set, you'll notice most have greater reconstruction error than the threshold. By varing the threshold, you can adjust the precision and recall of your classifier.
+:::
+:::
+
+::: callout-tip
+## tidy.outliers
+
+If you need something faster, and usually more practical do check out my package tidy.outliers for easy to use outlier detection methods.
+:::
+
+```{r}
+reconstructions <-  autoencoder |> predict(anomalous_test_data_x) |> as_tibble()
+
+anomalous_test_data_x_tibble <- anomalous_test_data_x |> as_tibble()
+
+test_loss = loss_mean_squared_error(reconstructions, anomalous_test_data_x_tibble)
+
+data_loss <- test_loss |> as.numeric() |> as_tibble()
+
+data_loss |> 
+  ggplot(aes(x = value)) +
+  geom_histogram(bins = 50) +
+  labs(title = 'Loss Anomalous Test Data',x = 'Test Loss', y = 'No of examples') +
+  theme_minimal()
+```
+
+## Classify anomalies
+
+```{r}
+predict_outlier <- function(model,data,threshold){
+  reconstructions <-  model |> predict(data)
+  loss <-  loss_mean_squared_error(reconstructions, data)
+  df_result <- k_less(loss,threshold) |>
+    as.numeric() |> 
+    as.factor() |> 
+    as_tibble() |> 
+    rename(estimate = value)
+  return(df_result)
+}
+
+preds <- predict_outlier(autoencoder,anomalous_test_data_x,threshold)
+test_data <- anomalous_test_data |>
+  select(target_varible) |> 
+  rename(truth = target_varible) |> 
+  mutate(truth = truth |> factor(levels = c(0,1)))
+
+df_result <- test_data |> 
+  bind_cols(preds)
+
+df_result |> 
+  yardstick::accuracy(truth = truth,estimate = estimate)
+
+df_result |> 
+  yardstick::precision(truth = truth,estimate = estimate)
+
+df_result |> 
+  yardstick::recall(truth = truth,estimate = estimate)
+```
+
+# Next Steps
+
+Check out the [Tensorflow Next Steps](https://www.tensorflow.org/tutorials/generative/autoencoder#next_steps "Tensorflow Next Steps")
