@@ -11,7 +11,7 @@
     "href": "blog.html",
     "title": "Blog",
     "section": "",
-    "text": "Order By\n       Default\n         \n          Title\n        \n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n  \n\n\n\n\n\n\n\n\n\n\ntidymodels\n\n\ntensorflow\n\n\ncode\n\n\n \n\n\n\n\n5 min\n\n\n\n\n\n\n  \n\n\n\n\n\n\n\n\n\n\ntidymodels\n\n\ncode\n\n\npackage\n\n\n \n\n\n\n\n1 min\n\n\n\n\n\n\nNo matching items"
+    "text": "Order By\n       Default\n         \n          Title\n        \n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ntidyverse\n\n\npandas\n\n\ncode\n\n\n \n\n\n\n\nAug 31, 2024\n\n\n0 min\n\n\n\n\n\n\n  \n\n\n\n\n\n\n\n\n\n\ntidymodels\n\n\ntensorflow\n\n\ncode\n\n\n \n\n\n\n\nMar 31, 2023\n\n\n5 min\n\n\n\n\n\n\n  \n\n\n\n\n\n\n\n\n\n\ntidymodels\n\n\ncode\n\n\npackage\n\n\n \n\n\n\n\nJan 31, 2023\n\n\n1 min\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "index.html",
@@ -116,7 +116,7 @@
     "href": "posts/new/autoencoder/index.html#discover-the-threshold-to-flag-annomalies",
     "title": "Functional Auto Encoder with R Keras",
     "section": "Discover the threshold to flag annomalies",
-    "text": "Discover the threshold to flag annomalies\n\nCodereconstructions <-  autoencoder |> predict(normal_train_data_x) |> as_tibble()\ntrain_data_tibble <- normal_train_data_x |> as_tibble()\n\n\ntrain_loss = loss_mean_squared_error(reconstructions, train_data_tibble)\n\ndata_loss <- train_loss |> as.numeric() |> as_tibble()\n\ndata_loss |> \n  ggplot(aes(x = value)) +\n  geom_histogram(bins = 50) +\n  labs(title = 'Loss Normal Train Data',x = 'Train Loss', y = 'No of examples') +\n  theme_minimal()\n\n\n\n\n\nCodethreshold <-mean(train_loss) + sd(train_loss)\n\nprint(threshold |> as.numeric())\n\n[1] 0.01230075\n\n\n\n\n\n\n\n\nCompletness\n\n\n\nThere are other strategies you could use to select a threshold value above which test examples should be classified as anomalous, the correct approach will depend on your dataset. You can learn more with the links at the end of this tutorial.\n\n\n\n\n\n\n\n\nStrategy\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nIf you examine the reconstruction error for the anomalous examples in the test set, you’ll notice most have greater reconstruction error than the threshold. By varing the threshold, you can adjust the precision and recall of your classifier.\n\n\n\n\n\n\n\n\n\n\ntidy.outliers\n\n\n\nIf you need something faster, and usually more practical do check out my package tidy.outliers for easy to use outlier detection methods.\n\n\n\nCodereconstructions <-  autoencoder |> predict(anomalous_test_data_x) |> as_tibble()\n\nanomalous_test_data_x_tibble <- anomalous_test_data_x |> as_tibble()\n\ntest_loss = loss_mean_squared_error(reconstructions, anomalous_test_data_x_tibble)\n\ndata_loss <- test_loss |> as.numeric() |> as_tibble()\n\ndata_loss |> \n  ggplot(aes(x = value)) +\n  geom_histogram(bins = 50) +\n  labs(title = 'Loss Anomalous Test Data',x = 'Test Loss', y = 'No of examples') +\n  theme_minimal()"
+    "text": "Discover the threshold to flag annomalies\n\nCodereconstructions <-  autoencoder |> predict(normal_train_data_x) |> as_tibble()\ntrain_data_tibble <- normal_train_data_x |> as_tibble()\n\n\ntrain_loss = loss_mean_squared_error(reconstructions, train_data_tibble)\n\ndata_loss <- train_loss |> as.numeric() |> as_tibble()\n\ndata_loss |> \n  ggplot(aes(x = value)) +\n  geom_histogram(bins = 50) +\n  labs(title = 'Loss Normal Train Data',x = 'Train Loss', y = 'No of examples') +\n  theme_minimal()\n\n\n\n\n\nCodethreshold <-mean(train_loss) + sd(train_loss)\n\nprint(threshold |> as.numeric())\n\n[1] 0.01252376\n\n\n\n\n\n\n\n\nCompletness\n\n\n\nThere are other strategies you could use to select a threshold value above which test examples should be classified as anomalous, the correct approach will depend on your dataset. You can learn more with the links at the end of this tutorial.\n\n\n\n\n\n\n\n\nStrategy\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nIf you examine the reconstruction error for the anomalous examples in the test set, you’ll notice most have greater reconstruction error than the threshold. By varing the threshold, you can adjust the precision and recall of your classifier.\n\n\n\n\n\n\n\n\n\n\ntidy.outliers\n\n\n\nIf you need something faster, and usually more practical do check out my package tidy.outliers for easy to use outlier detection methods.\n\n\n\nCodereconstructions <-  autoencoder |> predict(anomalous_test_data_x) |> as_tibble()\n\nanomalous_test_data_x_tibble <- anomalous_test_data_x |> as_tibble()\n\ntest_loss = loss_mean_squared_error(reconstructions, anomalous_test_data_x_tibble)\n\ndata_loss <- test_loss |> as.numeric() |> as_tibble()\n\ndata_loss |> \n  ggplot(aes(x = value)) +\n  geom_histogram(bins = 50) +\n  labs(title = 'Loss Anomalous Test Data',x = 'Test Loss', y = 'No of examples') +\n  theme_minimal()"
   },
   {
     "objectID": "posts/new/autoencoder/index.html#classify-anomalies",
@@ -166,5 +166,82 @@
     "title": "tidy.outliers",
     "section": "outForest method",
     "text": "outForest method\nThe new step_outliers_outForest uses the main function from the package, you can read more about it here outForest."
+  },
+  {
+    "objectID": "posts/new/pandas_tidyverse/index.html",
+    "href": "posts/new/pandas_tidyverse/index.html",
+    "title": "Pandas vs R after 6 years",
+    "section": "",
+    "text": "Codelibrary(tidyverse)\n\n\n\n\n\n\nCodeimport pandas as pd\nimport numpy as np"
+  },
+  {
+    "objectID": "posts/new/pandas_tidyverse/index.html#listing-the-variables",
+    "href": "posts/new/pandas_tidyverse/index.html#listing-the-variables",
+    "title": "Pandas vs R after 6 years",
+    "section": "Listing the variables",
+    "text": "Listing the variables\n\n\n\nCodelibrary(tidyverse)\n\n\n\n\n\n\nCodeimport pandas as pd\nimport numpy as np"
+  },
+  {
+    "objectID": "posts/new/pandas_tidyverse/index.html#listing-the-variables-1",
+    "href": "posts/new/pandas_tidyverse/index.html#listing-the-variables-1",
+    "title": "Pandas vs R after 6 years",
+    "section": "Listing the variables",
+    "text": "Listing the variables\n\n\n\nCodelibrary(tidyverse)\n\n\n\n\n\n\nCodeimport pandas as pd\nimport numpy as np"
+  },
+  {
+    "objectID": "posts/new/pandas_tidyverse/index.html#listing-the-variables-2",
+    "href": "posts/new/pandas_tidyverse/index.html#listing-the-variables-2",
+    "title": "Pandas vs R after 6 years",
+    "section": "Listing the variables",
+    "text": "Listing the variables\n\n\n\nCodelibrary(tidyverse)\n\n\n\n\n\n\nCodeimport pandas as pd\nimport numpy as np"
+  },
+  {
+    "objectID": "posts/new/pandas_tidyverse/index.html#listing-the-variables-3",
+    "href": "posts/new/pandas_tidyverse/index.html#listing-the-variables-3",
+    "title": "Pandas vs R after 6 years",
+    "section": "Listing the variables",
+    "text": "Listing the variables\n\n\n\nCodelibrary(tidyverse)\n\n\n\n\n\n\nCodeimport pandas as pd\nimport numpy as np"
+  },
+  {
+    "objectID": "posts/new/pandas_tidyverse/index.html#listing-the-variables-4",
+    "href": "posts/new/pandas_tidyverse/index.html#listing-the-variables-4",
+    "title": "Pandas vs R after 6 years",
+    "section": "Listing the variables",
+    "text": "Listing the variables\n\n\n\nCodelibrary(tidyverse)\n\n\n\n\n\n\nCodeimport pandas as pd\nimport numpy as np"
+  },
+  {
+    "objectID": "posts/new/pandas_tidyverse/index.html#listing-the-variables-5",
+    "href": "posts/new/pandas_tidyverse/index.html#listing-the-variables-5",
+    "title": "Pandas vs R after 6 years",
+    "section": "Listing the variables",
+    "text": "Listing the variables\n\n\n\nCodelibrary(tidyverse)\n\n\n\n\n\n\nCodeimport pandas as pd\nimport numpy as np"
+  },
+  {
+    "objectID": "posts/new/pandas_tidyverse/index.html#listing-the-variables-6",
+    "href": "posts/new/pandas_tidyverse/index.html#listing-the-variables-6",
+    "title": "Pandas vs R after 6 years",
+    "section": "Listing the variables",
+    "text": "Listing the variables\n\n\n\nCodelibrary(tidyverse)\n\n\n\n\n\n\nCodeimport pandas as pd\nimport numpy as np"
+  },
+  {
+    "objectID": "posts/new/pandas_tidyverse/index.html#listing-the-variables-7",
+    "href": "posts/new/pandas_tidyverse/index.html#listing-the-variables-7",
+    "title": "Pandas vs R after 6 years",
+    "section": "Listing the variables",
+    "text": "Listing the variables\n\n\n\nCodelibrary(tidyverse)\n\n\n\n\n\n\nCodeimport pandas as pd\nimport numpy as np"
+  },
+  {
+    "objectID": "posts/new/pandas_tidyverse/index.html#listing-the-variables-8",
+    "href": "posts/new/pandas_tidyverse/index.html#listing-the-variables-8",
+    "title": "Pandas vs R after 6 years",
+    "section": "Listing the variables",
+    "text": "Listing the variables\n\n\n\nCodelibrary(tidyverse)\n\n\n\n\n\n\nCodeimport pandas as pd\nimport numpy as np"
+  },
+  {
+    "objectID": "posts/new/pandas_tidyverse/index.html#listing-the-variables-9",
+    "href": "posts/new/pandas_tidyverse/index.html#listing-the-variables-9",
+    "title": "Pandas vs R after 6 years",
+    "section": "Listing the variables",
+    "text": "Listing the variables\n\n\n\nCodelibrary(tidyverse)\n\n\n\n\n\n\nCodeimport pandas as pd\nimport numpy as np"
   }
 ]

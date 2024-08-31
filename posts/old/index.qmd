@@ -8,6 +8,7 @@ code-fold: show
 code-link: true
 categories: [tidymodels,code,package]
 image: https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDvE-FcZtiyIvEPBjf_UGXqeEOXh-iVx2K3g&usqp=CAU
+date: 2023-01-31
 ---
 
 # What is tidy.outliers?

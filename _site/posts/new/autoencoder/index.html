@@ -158,10 +158,10 @@ gtag('config', 'G-V18SLYYHQJ', { 'anonymize_ip': true});
     <a class="nav-link" href="../../../index.html">Welcome to my site</a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../about.html">About</a>
+    <a class="nav-link" href="../../../about.html">About Me</a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../blog.html">My posts</a>
+    <a class="nav-link" href="../../../blog.html">Blog</a>
   </li>  
 </ul>
 <ul class="navbar-nav navbar-nav-scroll ms-auto">
@@ -269,9 +269,9 @@ gtag('config', 'G-V18SLYYHQJ', { 'anonymize_ip': true});
 <p>This is a somewhat simple post trying to mimic the guides on auto encoders present in <a href="https://www.tensorflow.org/tutorials/generative/autoencoder#third_example_anomaly_detection" title="Third example: Anomaly detection">Third example: Anomaly detection</a></p>
 </section><section id="libraries" class="level1"><h1>Libraries</h1>
 <p>Do keep in mind that in order to use tensorflow you should run</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">tensorflow</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tensorflow/man/install_tensorflow.html">install_tensorflow</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">tensorflow</span><span class="fu">::</span><span class="fu">install_tensorflow</span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell">
-<details open=""><summary>Code</summary><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://keras.rstudio.com">keras</a></span><span class="op">)</span></span>
+<details open=""><summary>Code</summary><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tensorflow.rstudio.com/">keras</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rsample.tidymodels.org">rsample</a></span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressMessages</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/recipes">recipes</a></span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressMessages</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
@@ -409,16 +409,16 @@ This message is displayed once per session.</code></pre>
 </section><section id="define-the-encoder" class="level2"><h2 class="anchored" data-anchor-id="define-the-encoder">Define the encoder</h2>
 <div class="cell">
 <details open=""><summary>Code</summary><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#|warning: false</span></span>
-<span><span class="va">encoder_input</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/keras/man/layer_input.html">layer_input</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">dim_features</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"features"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="va">encoder_input</span> <span class="op">&lt;-</span> <span class="fu">layer_input</span><span class="op">(</span>shape <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">dim_features</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"features"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output cell-output-stderr">
 <pre><code>Loaded Tensorflow version 2.9.2</code></pre>
 </div>
 <details open=""><summary>Code</summary><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">encoder_output</span> <span class="op">&lt;-</span> <span class="va">encoder_input</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/keras/man/layer_dense.html">layer_dense</a></span><span class="op">(</span><span class="fl">32</span>,activation <span class="op">=</span> <span class="st">"relu"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/keras/man/layer_dense.html">layer_dense</a></span><span class="op">(</span><span class="fl">16</span>,activation <span class="op">=</span> <span class="st">"relu"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/keras/man/layer_dense.html">layer_dense</a></span><span class="op">(</span><span class="va">latent_dim</span>,activation <span class="op">=</span> <span class="st">"relu"</span><span class="op">)</span></span>
+<span>  <span class="fu">layer_dense</span><span class="op">(</span><span class="fl">32</span>,activation <span class="op">=</span> <span class="st">"relu"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">layer_dense</span><span class="op">(</span><span class="fl">16</span>,activation <span class="op">=</span> <span class="st">"relu"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">layer_dense</span><span class="op">(</span><span class="va">latent_dim</span>,activation <span class="op">=</span> <span class="st">"relu"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">encoder</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/keras/man/keras_model.html">keras_model</a></span><span class="op">(</span><span class="va">encoder_input</span>, <span class="va">encoder_output</span>, name <span class="op">=</span> <span class="st">"encoder"</span><span class="op">)</span></span>
+<span><span class="va">encoder</span> <span class="op">&lt;-</span> <span class="fu">keras_model</span><span class="op">(</span><span class="va">encoder_input</span>, <span class="va">encoder_output</span>, name <span class="op">=</span> <span class="st">"encoder"</span><span class="op">)</span></span>
 <span><span class="va">encoder</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output cell-output-stdout">
 <pre><code>Model: "encoder"
@@ -438,14 +438,14 @@ ________________________________________________________________________________
 </div>
 </section><section id="define-decoder" class="level2"><h2 class="anchored" data-anchor-id="define-decoder">Define Decoder</h2>
 <div class="cell">
-<details open=""><summary>Code</summary><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">decoder_input</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/keras/man/layer_input.html">layer_input</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">latent_dim</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"latent_dim"</span><span class="op">)</span></span>
+<details open=""><summary>Code</summary><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">decoder_input</span> <span class="op">&lt;-</span> <span class="fu">layer_input</span><span class="op">(</span>shape <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">latent_dim</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"latent_dim"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">decoder_output</span> <span class="op">&lt;-</span> <span class="va">decoder_input</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/keras/man/layer_dense.html">layer_dense</a></span><span class="op">(</span><span class="fl">16</span>,activation <span class="op">=</span> <span class="st">"relu"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/keras/man/layer_dense.html">layer_dense</a></span><span class="op">(</span><span class="fl">32</span>,activation <span class="op">=</span> <span class="st">"relu"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/keras/man/layer_dense.html">layer_dense</a></span><span class="op">(</span><span class="va">dim_features</span>,activation <span class="op">=</span> <span class="st">"sigmoid"</span><span class="op">)</span></span>
+<span>  <span class="fu">layer_dense</span><span class="op">(</span><span class="fl">16</span>,activation <span class="op">=</span> <span class="st">"relu"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">layer_dense</span><span class="op">(</span><span class="fl">32</span>,activation <span class="op">=</span> <span class="st">"relu"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">layer_dense</span><span class="op">(</span><span class="va">dim_features</span>,activation <span class="op">=</span> <span class="st">"sigmoid"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">decoder</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/keras/man/keras_model.html">keras_model</a></span><span class="op">(</span><span class="va">decoder_input</span>, <span class="va">decoder_output</span>, name <span class="op">=</span> <span class="st">"decoder"</span><span class="op">)</span></span>
+<span><span class="va">decoder</span> <span class="op">&lt;-</span> <span class="fu">keras_model</span><span class="op">(</span><span class="va">decoder_input</span>, <span class="va">decoder_output</span>, name <span class="op">=</span> <span class="st">"decoder"</span><span class="op">)</span></span>
 <span><span class="va">decoder</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output cell-output-stdout">
 <pre><code>Model: "decoder"
@@ -467,7 +467,7 @@ ________________________________________________________________________________
 <div class="cell">
 <details open=""><summary>Code</summary><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">encoded</span> <span class="op">&lt;-</span> <span class="fu">encoder</span><span class="op">(</span><span class="va">encoder_input</span><span class="op">)</span></span>
 <span><span class="va">decoded</span> <span class="op">&lt;-</span> <span class="fu">decoder</span><span class="op">(</span><span class="va">encoded</span><span class="op">)</span></span>
-<span><span class="va">autoencoder</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/keras/man/keras_model.html">keras_model</a></span><span class="op">(</span><span class="va">encoder_input</span>, <span class="va">decoded</span>,</span>
+<span><span class="va">autoencoder</span> <span class="op">&lt;-</span> <span class="fu">keras_model</span><span class="op">(</span><span class="va">encoder_input</span>, <span class="va">decoded</span>,</span>
 <span>                           name <span class="op">=</span> <span class="st">"autoencoder"</span><span class="op">)</span></span>
 <span><span class="va">autoencoder</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output cell-output-stdout">
@@ -488,9 +488,9 @@ ________________________________________________________________________________
 </section><section id="fit-the-model" class="level2"><h2 class="anchored" data-anchor-id="fit-the-model">Fit the model</h2>
 <div class="cell">
 <details open=""><summary>Code</summary><div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">history</span> <span class="op">&lt;-</span> <span class="va">autoencoder</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://generics.r-lib.org/reference/compile.html">compile</a></span><span class="op">(</span>loss <span class="op">=</span> <span class="st">"mae"</span>,</span>
+<span>  <span class="fu">compile</span><span class="op">(</span>loss <span class="op">=</span> <span class="st">"mae"</span>,</span>
 <span>          optimizer <span class="op">=</span> <span class="st">"adam"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html">fit</a></span><span class="op">(</span></span>
+<span>  <span class="fu">fit</span><span class="op">(</span></span>
 <span>    x <span class="op">=</span> <span class="va">normal_train_data_x</span>,</span>
 <span>    y <span class="op">=</span> <span class="va">normal_train_data_x</span>,</span>
 <span>    epochs <span class="op">=</span> <span class="fl">20</span>,</span>
@@ -591,7 +591,7 @@ Call `lifecycle::last_lifecycle_warnings()` to see where this warning was genera
 <span><span class="va">train_data_tibble</span> <span class="op">&lt;-</span> <span class="va">normal_train_data_x</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span></span>
-<span><span class="va">train_loss</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/keras/man/loss-functions.html">loss_mean_squared_error</a></span><span class="op">(</span><span class="va">reconstructions</span>, <span class="va">train_data_tibble</span><span class="op">)</span></span>
+<span><span class="va">train_loss</span> <span class="op">=</span> <span class="fu">loss_mean_squared_error</span><span class="op">(</span><span class="va">reconstructions</span>, <span class="va">train_data_tibble</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">data_loss</span> <span class="op">&lt;-</span> <span class="va">train_loss</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
@@ -609,7 +609,7 @@ Call `lifecycle::last_lifecycle_warnings()` to see where this warning was genera
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">threshold</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.01230075</code></pre>
+<pre><code>[1] 0.01252376</code></pre>
 </div>
 </div>
 <div class="callout-note callout callout-style-default callout-captioned">
@@ -668,7 +668,7 @@ tidy.outliers
 <span></span>
 <span><span class="va">anomalous_test_data_x_tibble</span> <span class="op">&lt;-</span> <span class="va">anomalous_test_data_x</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">test_loss</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/keras/man/loss-functions.html">loss_mean_squared_error</a></span><span class="op">(</span><span class="va">reconstructions</span>, <span class="va">anomalous_test_data_x_tibble</span><span class="op">)</span></span>
+<span><span class="va">test_loss</span> <span class="op">=</span> <span class="fu">loss_mean_squared_error</span><span class="op">(</span><span class="va">reconstructions</span>, <span class="va">anomalous_test_data_x_tibble</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">data_loss</span> <span class="op">&lt;-</span> <span class="va">test_loss</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
@@ -685,8 +685,8 @@ tidy.outliers
 <div class="cell">
 <details open=""><summary>Code</summary><div class="sourceCode" id="cb34"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">predict_outlier</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">model</span>,<span class="va">data</span>,<span class="va">threshold</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="va">reconstructions</span> <span class="op">&lt;-</span>  <span class="va">model</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
-<span>  <span class="va">loss</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/pkg/keras/man/loss-functions.html">loss_mean_squared_error</a></span><span class="op">(</span><span class="va">reconstructions</span>, <span class="va">data</span><span class="op">)</span></span>
-<span>  <span class="va">df_result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/keras/man/k_less.html">k_less</a></span><span class="op">(</span><span class="va">loss</span>,<span class="va">threshold</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="va">loss</span> <span class="op">&lt;-</span>  <span class="fu">loss_mean_squared_error</span><span class="op">(</span><span class="va">reconstructions</span>, <span class="va">data</span><span class="op">)</span></span>
+<span>  <span class="va">df_result</span> <span class="op">&lt;-</span> <span class="fu">k_less</span><span class="op">(</span><span class="va">loss</span>,<span class="va">threshold</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>    <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -701,7 +701,7 @@ tidy.outliers
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>truth <span class="op">=</span> <span class="va">truth</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span>levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">df_result</span> <span class="op">&lt;-</span> <span class="va">test_data</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html">bind_cols</a></span><span class="op">(</span><span class="va">preds</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html">bind_cols</a></span><span class="op">(</span><span class="va">preds</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">df_result</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">yardstick</span><span class="fu">::</span><span class="fu"><a href="https://yardstick.tidymodels.org/reference/accuracy.html">accuracy</a></span><span class="op">(</span>truth <span class="op">=</span> <span class="va">truth</span>,estimate <span class="op">=</span> <span class="va">estimate</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1001,7 +1001,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     });
   }
 });
-</script><script src="https://giscus.app/client.js" data-repo="brunocarlin/quarto_carlin_website" data-repo-id="" data-category="General" data-category-id="" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script><script src="https://giscus.app/client.js" data-repo="brunocarlin/quarto_carlin_website" data-repo-id="R_kgDOID62lQ" data-category="General" data-category-id="DIC_kwDOID62lc4CRnbw" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
 <div class="sourceCode" id="cb37" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Functional Auto Encoder with R Keras"</span></span>

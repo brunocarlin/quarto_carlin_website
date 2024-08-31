@@ -1,0 +1,40 @@
+---
+title: "Pandas vs R after 6 years"
+author: "Bruno Testaguzza Carlin"
+image: ""
+toc: true
+df-print: paged
+code-tools: true
+code-fold: show
+code-link: true
+categories: [tidyverse,pandas,code]
+date: 2024-08-31
+---
+
+:::: {.columns}
+
+# Importing Packages
+
+::: {.column width="50%"}
+
+```{r}
+#| warning=FALSE
+library(tidyverse)
+```
+
+:::
+
+::: {.column width="10%"}
+:::
+
+::: {.column width="40%"}
+
+```{python}
+import pandas as pd
+import numpy as np
+```
+
+
+:::
+
+::::
