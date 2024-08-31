@@ -6,8 +6,8 @@
       version="2.0">
 <channel>
 <title>Bruno Testaguzza Carlin</title>
-<link>https://carlin.quarto.pub/bruno-testaguzza-carlin/blog.html#category=R</link>
-<atom:link href="https://carlin.quarto.pub/bruno-testaguzza-carlin/blog-r.xml" rel="self" type="application/rss+xml"/>
+<link>https://carlin.quarto.pub/bruno-testaguzza-carlin/blog.html#category=Python</link>
+<atom:link href="https://carlin.quarto.pub/bruno-testaguzza-carlin/blog-python.xml" rel="self" type="application/rss+xml"/>
 <description>The Site of Bruno Testaguzza Carlin</description>
 <generator>quarto-1.1.168</generator>
 <lastBuildDate>Sat, 31 Aug 2024 18:41:03 GMT</lastBuildDate>

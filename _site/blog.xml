@@ -10,7 +10,41 @@
 <atom:link href="https://carlin.quarto.pub/bruno-testaguzza-carlin/blog.xml" rel="self" type="application/rss+xml"/>
 <description>The Site of Bruno Testaguzza Carlin</description>
 <generator>quarto-1.1.168</generator>
-<lastBuildDate>Sat, 24 Sep 2022 22:36:37 GMT</lastBuildDate>
+<lastBuildDate>Sat, 31 Aug 2024 03:00:00 GMT</lastBuildDate>
+<item>
+  <title>Pandas vs R after 6 years</title>
+  <dc:creator>Bruno Testaguzza Carlin</dc:creator>
+  <link>https://carlin.quarto.pub/bruno-testaguzza-carlin/posts/new/pandas_tidyverse/index.html</link>
+  <description><![CDATA[ <div class="columns">
+<section id="importing-packages" class="level1"><h1>Importing Packages</h1>
+<div class="column" style="width:50%;">
+<div class="cell">
+<details open=""><summary>Code</summary><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw" style="color: #003B4F;"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op" style="color: #5E5E5E;">)</span></span></code></pre></div>
+</details>
+</div>
+</div><div class="column" style="width:10%;">
+
+</div><div class="column" style="width:40%;">
+<div class="cell">
+<details open=""><summary>Code</summary><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;">import</span> pandas <span class="im" style="color: #00769E;">as</span> pd</span>
+<span id="cb2-2"><span class="im" style="color: #00769E;">import</span> numpy <span class="im" style="color: #00769E;">as</span> np</span></code></pre></div>
+</details>
+</div>
+</div>
+</section>
+</div>
+
+
+<!-- -->
+
+
+ ]]></description>
+  <category>tidyverse</category>
+  <category>pandas</category>
+  <category>code</category>
+  <guid>https://carlin.quarto.pub/bruno-testaguzza-carlin/posts/new/pandas_tidyverse/index.html</guid>
+  <pubDate>Sat, 31 Aug 2024 03:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Functional Auto Encoder with R Keras</title>
   <dc:creator>Bruno Testaguzza Carlin</dc:creator>
@@ -19,9 +53,9 @@
 <p>This is a somewhat simple post trying to mimic the guides on auto encoders present in <a href="https://www.tensorflow.org/tutorials/generative/autoencoder#third_example_anomaly_detection" title="Third example: Anomaly detection">Third example: Anomaly detection</a></p>
 </section><section id="libraries" class="level1"><h1>Libraries</h1>
 <p>Do keep in mind that in order to use tensorflow you should run</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu" style="color: #4758AB;">tensorflow</span><span class="fu" style="color: #4758AB;">::</span><span class="fu" style="color: #4758AB;"><a href="https://rdrr.io/pkg/tensorflow/man/install_tensorflow.html">install_tensorflow</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="op" style="color: #5E5E5E;">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu" style="color: #4758AB;">tensorflow</span><span class="fu" style="color: #4758AB;">::</span><span class="fu" style="color: #4758AB;">install_tensorflow</span><span class="op" style="color: #5E5E5E;">(</span><span class="op" style="color: #5E5E5E;">)</span></span></code></pre></div>
 <div class="cell">
-<details open=""><summary>Code</summary><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw" style="color: #003B4F;"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;"><a href="https://keras.rstudio.com">keras</a></span><span class="op" style="color: #5E5E5E;">)</span></span>
+<details open=""><summary>Code</summary><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw" style="color: #003B4F;"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;"><a href="https://tensorflow.rstudio.com/">keras</a></span><span class="op" style="color: #5E5E5E;">)</span></span>
 <span><span class="kw" style="color: #003B4F;"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;"><a href="https://rsample.tidymodels.org">rsample</a></span><span class="op" style="color: #5E5E5E;">)</span> <span class="op" style="color: #5E5E5E;">|&gt;</span> <span class="fu" style="color: #4758AB;"><a href="https://rdrr.io/r/base/message.html">suppressMessages</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="op" style="color: #5E5E5E;">)</span></span>
 <span><span class="kw" style="color: #003B4F;"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;"><a href="https://github.com/tidymodels/recipes">recipes</a></span><span class="op" style="color: #5E5E5E;">)</span> <span class="op" style="color: #5E5E5E;">|&gt;</span> <span class="fu" style="color: #4758AB;"><a href="https://rdrr.io/r/base/message.html">suppressMessages</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="op" style="color: #5E5E5E;">)</span></span>
 <span><span class="kw" style="color: #003B4F;"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op" style="color: #5E5E5E;">)</span></span>
@@ -159,16 +193,16 @@ This message is displayed once per session.</code></pre>
 </section><section id="define-the-encoder" class="level2"><h2 class="anchored" data-anchor-id="define-the-encoder">Define the encoder</h2>
 <div class="cell">
 <details open=""><summary>Code</summary><div class="sourceCode" id="cb16" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co" style="color: #5E5E5E;">#|warning: false</span></span>
-<span><span class="va" style="color: #111111;">encoder_input</span> <span class="op" style="color: #5E5E5E;">&lt;-</span> <span class="fu" style="color: #4758AB;"><a href="https://rdrr.io/pkg/keras/man/layer_input.html">layer_input</a></span><span class="op" style="color: #5E5E5E;">(</span>shape <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;">dim_features</span><span class="op" style="color: #5E5E5E;">)</span>, name <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"features"</span><span class="op" style="color: #5E5E5E;">)</span></span></code></pre></div>
+<span><span class="va" style="color: #111111;">encoder_input</span> <span class="op" style="color: #5E5E5E;">&lt;-</span> <span class="fu" style="color: #4758AB;">layer_input</span><span class="op" style="color: #5E5E5E;">(</span>shape <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;">dim_features</span><span class="op" style="color: #5E5E5E;">)</span>, name <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"features"</span><span class="op" style="color: #5E5E5E;">)</span></span></code></pre></div>
 </details><div class="cell-output cell-output-stderr">
 <pre><code>Loaded Tensorflow version 2.9.2</code></pre>
 </div>
 <details open=""><summary>Code</summary><div class="sourceCode" id="cb18" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va" style="color: #111111;">encoder_output</span> <span class="op" style="color: #5E5E5E;">&lt;-</span> <span class="va" style="color: #111111;">encoder_input</span> <span class="op" style="color: #5E5E5E;">|&gt;</span> </span>
-<span>  <span class="fu" style="color: #4758AB;"><a href="https://rdrr.io/pkg/keras/man/layer_dense.html">layer_dense</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="fl" style="color: #AD0000;">32</span>,activation <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"relu"</span><span class="op" style="color: #5E5E5E;">)</span> <span class="op" style="color: #5E5E5E;">|&gt;</span> </span>
-<span>  <span class="fu" style="color: #4758AB;"><a href="https://rdrr.io/pkg/keras/man/layer_dense.html">layer_dense</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="fl" style="color: #AD0000;">16</span>,activation <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"relu"</span><span class="op" style="color: #5E5E5E;">)</span> <span class="op" style="color: #5E5E5E;">|&gt;</span></span>
-<span>  <span class="fu" style="color: #4758AB;"><a href="https://rdrr.io/pkg/keras/man/layer_dense.html">layer_dense</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;">latent_dim</span>,activation <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"relu"</span><span class="op" style="color: #5E5E5E;">)</span></span>
+<span>  <span class="fu" style="color: #4758AB;">layer_dense</span><span class="op" style="color: #5E5E5E;">(</span><span class="fl" style="color: #AD0000;">32</span>,activation <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"relu"</span><span class="op" style="color: #5E5E5E;">)</span> <span class="op" style="color: #5E5E5E;">|&gt;</span> </span>
+<span>  <span class="fu" style="color: #4758AB;">layer_dense</span><span class="op" style="color: #5E5E5E;">(</span><span class="fl" style="color: #AD0000;">16</span>,activation <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"relu"</span><span class="op" style="color: #5E5E5E;">)</span> <span class="op" style="color: #5E5E5E;">|&gt;</span></span>
+<span>  <span class="fu" style="color: #4758AB;">layer_dense</span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;">latent_dim</span>,activation <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"relu"</span><span class="op" style="color: #5E5E5E;">)</span></span>
 <span></span>
-<span><span class="va" style="color: #111111;">encoder</span> <span class="op" style="color: #5E5E5E;">&lt;-</span> <span class="fu" style="color: #4758AB;"><a href="https://rdrr.io/pkg/keras/man/keras_model.html">keras_model</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;">encoder_input</span>, <span class="va" style="color: #111111;">encoder_output</span>, name <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"encoder"</span><span class="op" style="color: #5E5E5E;">)</span></span>
+<span><span class="va" style="color: #111111;">encoder</span> <span class="op" style="color: #5E5E5E;">&lt;-</span> <span class="fu" style="color: #4758AB;">keras_model</span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;">encoder_input</span>, <span class="va" style="color: #111111;">encoder_output</span>, name <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"encoder"</span><span class="op" style="color: #5E5E5E;">)</span></span>
 <span><span class="va" style="color: #111111;">encoder</span></span></code></pre></div>
 </details><div class="cell-output cell-output-stdout">
 <pre><code>Model: "encoder"
@@ -188,14 +222,14 @@ ________________________________________________________________________________
 </div>
 </section><section id="define-decoder" class="level2"><h2 class="anchored" data-anchor-id="define-decoder">Define Decoder</h2>
 <div class="cell">
-<details open=""><summary>Code</summary><div class="sourceCode" id="cb20" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va" style="color: #111111;">decoder_input</span> <span class="op" style="color: #5E5E5E;">&lt;-</span> <span class="fu" style="color: #4758AB;"><a href="https://rdrr.io/pkg/keras/man/layer_input.html">layer_input</a></span><span class="op" style="color: #5E5E5E;">(</span>shape <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;">latent_dim</span><span class="op" style="color: #5E5E5E;">)</span>, name <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"latent_dim"</span><span class="op" style="color: #5E5E5E;">)</span></span>
+<details open=""><summary>Code</summary><div class="sourceCode" id="cb20" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va" style="color: #111111;">decoder_input</span> <span class="op" style="color: #5E5E5E;">&lt;-</span> <span class="fu" style="color: #4758AB;">layer_input</span><span class="op" style="color: #5E5E5E;">(</span>shape <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;">latent_dim</span><span class="op" style="color: #5E5E5E;">)</span>, name <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"latent_dim"</span><span class="op" style="color: #5E5E5E;">)</span></span>
 <span></span>
 <span><span class="va" style="color: #111111;">decoder_output</span> <span class="op" style="color: #5E5E5E;">&lt;-</span> <span class="va" style="color: #111111;">decoder_input</span> <span class="op" style="color: #5E5E5E;">|&gt;</span> </span>
-<span>  <span class="fu" style="color: #4758AB;"><a href="https://rdrr.io/pkg/keras/man/layer_dense.html">layer_dense</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="fl" style="color: #AD0000;">16</span>,activation <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"relu"</span><span class="op" style="color: #5E5E5E;">)</span> <span class="op" style="color: #5E5E5E;">|&gt;</span> </span>
-<span>  <span class="fu" style="color: #4758AB;"><a href="https://rdrr.io/pkg/keras/man/layer_dense.html">layer_dense</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="fl" style="color: #AD0000;">32</span>,activation <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"relu"</span><span class="op" style="color: #5E5E5E;">)</span> <span class="op" style="color: #5E5E5E;">|&gt;</span></span>
-<span>  <span class="fu" style="color: #4758AB;"><a href="https://rdrr.io/pkg/keras/man/layer_dense.html">layer_dense</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;">dim_features</span>,activation <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"sigmoid"</span><span class="op" style="color: #5E5E5E;">)</span></span>
+<span>  <span class="fu" style="color: #4758AB;">layer_dense</span><span class="op" style="color: #5E5E5E;">(</span><span class="fl" style="color: #AD0000;">16</span>,activation <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"relu"</span><span class="op" style="color: #5E5E5E;">)</span> <span class="op" style="color: #5E5E5E;">|&gt;</span> </span>
+<span>  <span class="fu" style="color: #4758AB;">layer_dense</span><span class="op" style="color: #5E5E5E;">(</span><span class="fl" style="color: #AD0000;">32</span>,activation <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"relu"</span><span class="op" style="color: #5E5E5E;">)</span> <span class="op" style="color: #5E5E5E;">|&gt;</span></span>
+<span>  <span class="fu" style="color: #4758AB;">layer_dense</span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;">dim_features</span>,activation <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"sigmoid"</span><span class="op" style="color: #5E5E5E;">)</span></span>
 <span></span>
-<span><span class="va" style="color: #111111;">decoder</span> <span class="op" style="color: #5E5E5E;">&lt;-</span> <span class="fu" style="color: #4758AB;"><a href="https://rdrr.io/pkg/keras/man/keras_model.html">keras_model</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;">decoder_input</span>, <span class="va" style="color: #111111;">decoder_output</span>, name <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"decoder"</span><span class="op" style="color: #5E5E5E;">)</span></span>
+<span><span class="va" style="color: #111111;">decoder</span> <span class="op" style="color: #5E5E5E;">&lt;-</span> <span class="fu" style="color: #4758AB;">keras_model</span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;">decoder_input</span>, <span class="va" style="color: #111111;">decoder_output</span>, name <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"decoder"</span><span class="op" style="color: #5E5E5E;">)</span></span>
 <span><span class="va" style="color: #111111;">decoder</span></span></code></pre></div>
 </details><div class="cell-output cell-output-stdout">
 <pre><code>Model: "decoder"
@@ -217,7 +251,7 @@ ________________________________________________________________________________
 <div class="cell">
 <details open=""><summary>Code</summary><div class="sourceCode" id="cb22" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va" style="color: #111111;">encoded</span> <span class="op" style="color: #5E5E5E;">&lt;-</span> <span class="fu" style="color: #4758AB;">encoder</span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;">encoder_input</span><span class="op" style="color: #5E5E5E;">)</span></span>
 <span><span class="va" style="color: #111111;">decoded</span> <span class="op" style="color: #5E5E5E;">&lt;-</span> <span class="fu" style="color: #4758AB;">decoder</span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;">encoded</span><span class="op" style="color: #5E5E5E;">)</span></span>
-<span><span class="va" style="color: #111111;">autoencoder</span> <span class="op" style="color: #5E5E5E;">&lt;-</span> <span class="fu" style="color: #4758AB;"><a href="https://rdrr.io/pkg/keras/man/keras_model.html">keras_model</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;">encoder_input</span>, <span class="va" style="color: #111111;">decoded</span>,</span>
+<span><span class="va" style="color: #111111;">autoencoder</span> <span class="op" style="color: #5E5E5E;">&lt;-</span> <span class="fu" style="color: #4758AB;">keras_model</span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;">encoder_input</span>, <span class="va" style="color: #111111;">decoded</span>,</span>
 <span>                           name <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"autoencoder"</span><span class="op" style="color: #5E5E5E;">)</span></span>
 <span><span class="va" style="color: #111111;">autoencoder</span></span></code></pre></div>
 </details><div class="cell-output cell-output-stdout">
@@ -238,9 +272,9 @@ ________________________________________________________________________________
 </section><section id="fit-the-model" class="level2"><h2 class="anchored" data-anchor-id="fit-the-model">Fit the model</h2>
 <div class="cell">
 <details open=""><summary>Code</summary><div class="sourceCode" id="cb24" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va" style="color: #111111;">history</span> <span class="op" style="color: #5E5E5E;">&lt;-</span> <span class="va" style="color: #111111;">autoencoder</span> <span class="op" style="color: #5E5E5E;">|&gt;</span></span>
-<span>  <span class="fu" style="color: #4758AB;"><a href="https://generics.r-lib.org/reference/compile.html">compile</a></span><span class="op" style="color: #5E5E5E;">(</span>loss <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"mae"</span>,</span>
+<span>  <span class="fu" style="color: #4758AB;">compile</span><span class="op" style="color: #5E5E5E;">(</span>loss <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"mae"</span>,</span>
 <span>          optimizer <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"adam"</span><span class="op" style="color: #5E5E5E;">)</span> <span class="op" style="color: #5E5E5E;">|&gt;</span></span>
-<span>  <span class="fu" style="color: #4758AB;"><a href="https://generics.r-lib.org/reference/fit.html">fit</a></span><span class="op" style="color: #5E5E5E;">(</span></span>
+<span>  <span class="fu" style="color: #4758AB;">fit</span><span class="op" style="color: #5E5E5E;">(</span></span>
 <span>    x <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">normal_train_data_x</span>,</span>
 <span>    y <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">normal_train_data_x</span>,</span>
 <span>    epochs <span class="op" style="color: #5E5E5E;">=</span> <span class="fl" style="color: #AD0000;">20</span>,</span>
@@ -341,7 +375,7 @@ Call `lifecycle::last_lifecycle_warnings()` to see where this warning was genera
 <span><span class="va" style="color: #111111;">train_data_tibble</span> <span class="op" style="color: #5E5E5E;">&lt;-</span> <span class="va" style="color: #111111;">normal_train_data_x</span> <span class="op" style="color: #5E5E5E;">|&gt;</span> <span class="fu" style="color: #4758AB;"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="op" style="color: #5E5E5E;">)</span></span>
 <span></span>
 <span></span>
-<span><span class="va" style="color: #111111;">train_loss</span> <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;"><a href="https://rdrr.io/pkg/keras/man/loss-functions.html">loss_mean_squared_error</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;">reconstructions</span>, <span class="va" style="color: #111111;">train_data_tibble</span><span class="op" style="color: #5E5E5E;">)</span></span>
+<span><span class="va" style="color: #111111;">train_loss</span> <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;">loss_mean_squared_error</span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;">reconstructions</span>, <span class="va" style="color: #111111;">train_data_tibble</span><span class="op" style="color: #5E5E5E;">)</span></span>
 <span></span>
 <span><span class="va" style="color: #111111;">data_loss</span> <span class="op" style="color: #5E5E5E;">&lt;-</span> <span class="va" style="color: #111111;">train_loss</span> <span class="op" style="color: #5E5E5E;">|&gt;</span> <span class="fu" style="color: #4758AB;"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="op" style="color: #5E5E5E;">)</span> <span class="op" style="color: #5E5E5E;">|&gt;</span> <span class="fu" style="color: #4758AB;"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="op" style="color: #5E5E5E;">)</span></span>
 <span></span>
@@ -359,7 +393,7 @@ Call `lifecycle::last_lifecycle_warnings()` to see where this warning was genera
 <span></span>
 <span><span class="fu" style="color: #4758AB;"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;">threshold</span> <span class="op" style="color: #5E5E5E;">|&gt;</span> <span class="fu" style="color: #4758AB;"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="op" style="color: #5E5E5E;">)</span><span class="op" style="color: #5E5E5E;">)</span></span></code></pre></div>
 </details><div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.01230075</code></pre>
+<pre><code>[1] 0.01252376</code></pre>
 </div>
 </div>
 <div class="callout-note callout callout-style-default callout-captioned">
@@ -418,7 +452,7 @@ tidy.outliers
 <span></span>
 <span><span class="va" style="color: #111111;">anomalous_test_data_x_tibble</span> <span class="op" style="color: #5E5E5E;">&lt;-</span> <span class="va" style="color: #111111;">anomalous_test_data_x</span> <span class="op" style="color: #5E5E5E;">|&gt;</span> <span class="fu" style="color: #4758AB;"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="op" style="color: #5E5E5E;">)</span></span>
 <span></span>
-<span><span class="va" style="color: #111111;">test_loss</span> <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;"><a href="https://rdrr.io/pkg/keras/man/loss-functions.html">loss_mean_squared_error</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;">reconstructions</span>, <span class="va" style="color: #111111;">anomalous_test_data_x_tibble</span><span class="op" style="color: #5E5E5E;">)</span></span>
+<span><span class="va" style="color: #111111;">test_loss</span> <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;">loss_mean_squared_error</span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;">reconstructions</span>, <span class="va" style="color: #111111;">anomalous_test_data_x_tibble</span><span class="op" style="color: #5E5E5E;">)</span></span>
 <span></span>
 <span><span class="va" style="color: #111111;">data_loss</span> <span class="op" style="color: #5E5E5E;">&lt;-</span> <span class="va" style="color: #111111;">test_loss</span> <span class="op" style="color: #5E5E5E;">|&gt;</span> <span class="fu" style="color: #4758AB;"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="op" style="color: #5E5E5E;">)</span> <span class="op" style="color: #5E5E5E;">|&gt;</span> <span class="fu" style="color: #4758AB;"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="op" style="color: #5E5E5E;">)</span></span>
 <span></span>
@@ -435,8 +469,8 @@ tidy.outliers
 <div class="cell">
 <details open=""><summary>Code</summary><div class="sourceCode" id="cb34" style="background: #f1f3f5;"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va" style="color: #111111;">predict_outlier</span> <span class="op" style="color: #5E5E5E;">&lt;-</span> <span class="kw" style="color: #003B4F;">function</span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;">model</span>,<span class="va" style="color: #111111;">data</span>,<span class="va" style="color: #111111;">threshold</span><span class="op" style="color: #5E5E5E;">)</span><span class="op" style="color: #5E5E5E;">{</span></span>
 <span>  <span class="va" style="color: #111111;">reconstructions</span> <span class="op" style="color: #5E5E5E;">&lt;-</span>  <span class="va" style="color: #111111;">model</span> <span class="op" style="color: #5E5E5E;">|&gt;</span> <span class="fu" style="color: #4758AB;"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;">data</span><span class="op" style="color: #5E5E5E;">)</span></span>
-<span>  <span class="va" style="color: #111111;">loss</span> <span class="op" style="color: #5E5E5E;">&lt;-</span>  <span class="fu" style="color: #4758AB;"><a href="https://rdrr.io/pkg/keras/man/loss-functions.html">loss_mean_squared_error</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;">reconstructions</span>, <span class="va" style="color: #111111;">data</span><span class="op" style="color: #5E5E5E;">)</span></span>
-<span>  <span class="va" style="color: #111111;">df_result</span> <span class="op" style="color: #5E5E5E;">&lt;-</span> <span class="fu" style="color: #4758AB;"><a href="https://rdrr.io/pkg/keras/man/k_less.html">k_less</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;">loss</span>,<span class="va" style="color: #111111;">threshold</span><span class="op" style="color: #5E5E5E;">)</span> <span class="op" style="color: #5E5E5E;">|&gt;</span></span>
+<span>  <span class="va" style="color: #111111;">loss</span> <span class="op" style="color: #5E5E5E;">&lt;-</span>  <span class="fu" style="color: #4758AB;">loss_mean_squared_error</span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;">reconstructions</span>, <span class="va" style="color: #111111;">data</span><span class="op" style="color: #5E5E5E;">)</span></span>
+<span>  <span class="va" style="color: #111111;">df_result</span> <span class="op" style="color: #5E5E5E;">&lt;-</span> <span class="fu" style="color: #4758AB;">k_less</span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;">loss</span>,<span class="va" style="color: #111111;">threshold</span><span class="op" style="color: #5E5E5E;">)</span> <span class="op" style="color: #5E5E5E;">|&gt;</span></span>
 <span>    <span class="fu" style="color: #4758AB;"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="op" style="color: #5E5E5E;">)</span> <span class="op" style="color: #5E5E5E;">|&gt;</span> </span>
 <span>    <span class="fu" style="color: #4758AB;"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="op" style="color: #5E5E5E;">)</span> <span class="op" style="color: #5E5E5E;">|&gt;</span> </span>
 <span>    <span class="fu" style="color: #4758AB;"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="op" style="color: #5E5E5E;">)</span> <span class="op" style="color: #5E5E5E;">|&gt;</span> </span>
@@ -451,7 +485,7 @@ tidy.outliers
 <span>  <span class="fu" style="color: #4758AB;"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op" style="color: #5E5E5E;">(</span>truth <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">truth</span> <span class="op" style="color: #5E5E5E;">|&gt;</span> <span class="fu" style="color: #4758AB;"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op" style="color: #5E5E5E;">(</span>levels <span class="op" style="color: #5E5E5E;">=</span> <span class="fu" style="color: #4758AB;"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="fl" style="color: #AD0000;">0</span>,<span class="fl" style="color: #AD0000;">1</span><span class="op" style="color: #5E5E5E;">)</span><span class="op" style="color: #5E5E5E;">)</span><span class="op" style="color: #5E5E5E;">)</span></span>
 <span></span>
 <span><span class="va" style="color: #111111;">df_result</span> <span class="op" style="color: #5E5E5E;">&lt;-</span> <span class="va" style="color: #111111;">test_data</span> <span class="op" style="color: #5E5E5E;">|&gt;</span> </span>
-<span>  <span class="fu" style="color: #4758AB;"><a href="https://dplyr.tidyverse.org/reference/bind.html">bind_cols</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;">preds</span><span class="op" style="color: #5E5E5E;">)</span></span>
+<span>  <span class="fu" style="color: #4758AB;"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html">bind_cols</a></span><span class="op" style="color: #5E5E5E;">(</span><span class="va" style="color: #111111;">preds</span><span class="op" style="color: #5E5E5E;">)</span></span>
 <span></span>
 <span><span class="va" style="color: #111111;">df_result</span> <span class="op" style="color: #5E5E5E;">|&gt;</span> </span>
 <span>  <span class="fu" style="color: #4758AB;">yardstick</span><span class="fu" style="color: #4758AB;">::</span><span class="fu" style="color: #4758AB;"><a href="https://yardstick.tidymodels.org/reference/accuracy.html">accuracy</a></span><span class="op" style="color: #5E5E5E;">(</span>truth <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">truth</span>,estimate <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">estimate</span><span class="op" style="color: #5E5E5E;">)</span></span></code></pre></div>
@@ -495,7 +529,7 @@ tidy.outliers
   <category>tensorflow</category>
   <category>code</category>
   <guid>https://carlin.quarto.pub/bruno-testaguzza-carlin/posts/new/autoencoder/index.html</guid>
-  <pubDate>Sat, 24 Sep 2022 22:36:37 GMT</pubDate>
+  <pubDate>Fri, 31 Mar 2023 03:00:00 GMT</pubDate>
   <media:content url="https://carlin.quarto.pub/bruno-testaguzza-carlin/posts/new/autoencoder/autoencoder.png" medium="image" type="image/png" height="101" width="144"/>
 </item>
 <item>
@@ -544,7 +578,7 @@ tidy.outliers
   <category>code</category>
   <category>package</category>
   <guid>https://carlin.quarto.pub/bruno-testaguzza-carlin/posts/old/index.html</guid>
-  <pubDate>Sat, 24 Sep 2022 22:36:37 GMT</pubDate>
+  <pubDate>Tue, 31 Jan 2023 03:00:00 GMT</pubDate>
   <media:content url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDvE-FcZtiyIvEPBjf_UGXqeEOXh-iVx2K3g&amp;usqp=CAU" medium="image"/>
 </item>
 </channel>

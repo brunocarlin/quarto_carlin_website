@@ -2,6 +2,7 @@
   {
     "listing": "/blog.html",
     "items": [
+      "/posts/new/pandas_tidyverse/index.html",
       "/posts/new/autoencoder/index.html",
       "/posts/old/index.html"
     ]

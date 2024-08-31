@@ -2,22 +2,26 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://carlin.quarto.pub/bruno-testaguzza-carlin/posts/old/index.html</loc>
-    <lastmod>2022-09-24T22:32:27.588Z</lastmod>
+    <lastmod>2024-08-31T18:34:59.284Z</lastmod>
   </url>
   <url>
     <loc>https://carlin.quarto.pub/bruno-testaguzza-carlin/blog.html</loc>
-    <lastmod>2022-09-24T22:36:37.541Z</lastmod>
+    <lastmod>2024-08-31T18:41:03.994Z</lastmod>
   </url>
   <url>
     <loc>https://carlin.quarto.pub/bruno-testaguzza-carlin/index.html</loc>
-    <lastmod>2022-09-24T22:35:22.450Z</lastmod>
+    <lastmod>2024-08-31T16:03:36.628Z</lastmod>
   </url>
   <url>
     <loc>https://carlin.quarto.pub/bruno-testaguzza-carlin/posts/new/autoencoder/index.html</loc>
-    <lastmod>2022-09-24T22:24:46.326Z</lastmod>
+    <lastmod>2024-08-31T15:39:00.412Z</lastmod>
   </url>
   <url>
     <loc>https://carlin.quarto.pub/bruno-testaguzza-carlin/about.html</loc>
-    <lastmod>2022-09-24T22:37:07.406Z</lastmod>
+    <lastmod>2024-08-31T18:41:01.469Z</lastmod>
+  </url>
+  <url>
+    <loc>https://carlin.quarto.pub/bruno-testaguzza-carlin/posts/new/pandas_tidyverse/index.html</loc>
+    <lastmod>2024-08-31T16:03:27.300Z</lastmod>
   </url>
 </urlset>
