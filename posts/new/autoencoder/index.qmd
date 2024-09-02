@@ -24,11 +24,15 @@ tensorflow::install_tensorflow()
 ```
 
 ```{r,warning=FALSE}
-library(keras)
+library(keras3)
 library(rsample) |> suppressMessages()
 library(recipes) |> suppressMessages()
 library(ggplot2)
 library(tidyr)
+```
+
+```{r}
+reticulate::use_virtualenv('py399')
 ```
 
 # Download The Dataset
@@ -148,6 +152,11 @@ latent_dim <- 8
 ```
 
 ## Define the encoder
+
+```{python}
+import sys
+sys.executable
+```
 
 ```{r}
 #|warning: false
@@ -289,7 +298,7 @@ reconstructions <-  autoencoder |> predict(normal_train_data_x) |> as_tibble()
 train_data_tibble <- normal_train_data_x |> as_tibble()
 
 
-train_loss = loss_mean_squared_error(reconstructions, train_data_tibble)
+train_loss = loss_mean_squared_error(as.matrix(reconstructions), as.matrix(train_data_tibble))
 
 data_loss <- train_loss |> as.numeric() |> as_tibble()
 
@@ -331,7 +340,7 @@ reconstructions <-  autoencoder |> predict(anomalous_test_data_x) |> as_tibble()
 
 anomalous_test_data_x_tibble <- anomalous_test_data_x |> as_tibble()
 
-test_loss = loss_mean_squared_error(reconstructions, anomalous_test_data_x_tibble)
+test_loss = loss_mean_squared_error(as.matrix(reconstructions), as.matrix(anomalous_test_data_x_tibble))
 
 data_loss <- test_loss |> as.numeric() |> as_tibble()
 
@@ -348,7 +357,7 @@ data_loss |>
 predict_outlier <- function(model,data,threshold){
   reconstructions <-  model |> predict(data)
   loss <-  loss_mean_squared_error(reconstructions, data)
-  df_result <- k_less(loss,threshold) |>
+  df_result <- keras::k_less(loss,threshold) |>
     as.numeric() |> 
     as.factor() |> 
     as_tibble() |> 
@@ -374,6 +383,10 @@ df_result |>
 df_result |> 
   yardstick::recall(truth = truth,estimate = estimate)
 ```
+
+# Changelog
+
+2024-02-09 Updated to Keras3.
 
 # Next Steps
 

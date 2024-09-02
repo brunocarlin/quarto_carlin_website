@@ -6,10 +6,10 @@
       version="2.0">
 <channel>
 <title>Bruno Testaguzza Carlin</title>
-<link>https://carlin.quarto.pub/bruno-testaguzza-carlin/blog.html#category=R</link>
-<atom:link href="https://carlin.quarto.pub/bruno-testaguzza-carlin/blog-r.xml" rel="self" type="application/rss+xml"/>
+<link>https://quartopub.com/sites/carlin/bruno-testaguzza-carlin/blog.html#category=R</link>
+<atom:link href="https://quartopub.com/sites/carlin/bruno-testaguzza-carlin/blog-r.xml" rel="self" type="application/rss+xml"/>
 <description>The Site of Bruno Testaguzza Carlin</description>
-<generator>quarto-1.1.168</generator>
-<lastBuildDate>Sat, 31 Aug 2024 18:41:03 GMT</lastBuildDate>
+<generator>quarto-1.5.57</generator>
+<lastBuildDate>Mon, 02 Sep 2024 19:19:16 GMT</lastBuildDate>
 </channel>
 </rss>

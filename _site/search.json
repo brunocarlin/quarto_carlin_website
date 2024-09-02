@@ -1,145 +1,5 @@
 [
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About Me",
-    "section": "",
-    "text": "This is my fourth personal website/blog which contains discussions on topics related to Data Science.\nI think quarto will be the stable home of my site wish me luck.\nPlease browse around, and feel free to leave a comment."
-  },
-  {
-    "objectID": "blog.html",
-    "href": "blog.html",
-    "title": "Blog",
-    "section": "",
-    "text": "Order By\n       Default\n         \n          Title\n        \n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ntidyverse\n\n\npandas\n\n\ncode\n\n\n \n\n\n\n\nAug 31, 2024\n\n\n0 min\n\n\n\n\n\n\n  \n\n\n\n\n\n\n\n\n\n\ntidymodels\n\n\ntensorflow\n\n\ncode\n\n\n \n\n\n\n\nMar 31, 2023\n\n\n5 min\n\n\n\n\n\n\n  \n\n\n\n\n\n\n\n\n\n\ntidymodels\n\n\ncode\n\n\npackage\n\n\n \n\n\n\n\nJan 31, 2023\n\n\n1 min\n\n\n\n\n\n\nNo matching items"
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Welcome to my site",
-    "section": "",
-    "text": "To learn more about Quarto websites visit https://quarto.org/docs/websites\nFeel free to ask any question on the comments or on any of my social media links."
-  },
-  {
-    "objectID": "posts/new/autoencoder/index.html",
-    "href": "posts/new/autoencoder/index.html",
-    "title": "Functional Auto Encoder with R Keras",
-    "section": "",
-    "text": "This is a somewhat simple post trying to mimic the guides on auto encoders present in Third example: Anomaly detection"
-  },
-  {
-    "objectID": "posts/new/autoencoder/index.html#split-the-data",
-    "href": "posts/new/autoencoder/index.html#split-the-data",
-    "title": "Functional Auto Encoder with R Keras",
-    "section": "Split the data",
-    "text": "Split the data\n\nCodeset.seed(20)\n\nraw_data_split <- initial_split(raw_data,prop = .8)\n\ntrain_data <- training(raw_data_split)\n\ntest_data <- testing(raw_data_split)"
-  },
-  {
-    "objectID": "posts/new/autoencoder/index.html#normalize-the-data-to-01.",
-    "href": "posts/new/autoencoder/index.html#normalize-the-data-to-01.",
-    "title": "Functional Auto Encoder with R Keras",
-    "section": "Normalize the data to [0,1].",
-    "text": "Normalize the data to [0,1].\n\nCodetarget_varible <- raw_data[,ncol(raw_data)] |> names()\n\nrecipe_data <- recipe(train_data) |> \n  update_role(target_varible,new_role = 'outcome') |> \n  update_role(-target_varible,new_role = 'predictor') |> \n  step_range(all_predictors(),min = 0,max = 1)\n\nNote: Using an external vector in selections is ambiguous.\nℹ Use `all_of(target_varible)` instead of `target_varible` to silence this message.\nℹ See <https://tidyselect.r-lib.org/reference/faq-external-vector.html>.\nThis message is displayed once per session.\n\nCodepreped_recipe_data <- recipe_data |> prep(train_data)\n\nbaked_train_data <- preped_recipe_data |> bake(new_data = NULL)\nbaked_test_data <- preped_recipe_data |> bake(test_data)"
-  },
-  {
-    "objectID": "posts/new/autoencoder/index.html#separate-datasets-for-future-usage",
-    "href": "posts/new/autoencoder/index.html#separate-datasets-for-future-usage",
-    "title": "Functional Auto Encoder with R Keras",
-    "section": "Separate datasets for future usage",
-    "text": "Separate datasets for future usage\nYou will train the autoencoder using only the normal rhythms\nWhich are labeled in this dataset as 1.\nSeparate the normal rhythms from the abnormal rhythms.\n\nCodenormal_train_data <-  baked_train_data |> filter(get(target_varible) == 1)\nnormal_test_data <-  baked_test_data |> filter(get(target_varible) == 1)\n\nanomalous_train_data <-  baked_train_data |> filter(get(target_varible) == 0)\nanomalous_test_data <-  baked_test_data |> filter(get(target_varible) == 0)"
-  },
-  {
-    "objectID": "posts/new/autoencoder/index.html#normal-ecg",
-    "href": "posts/new/autoencoder/index.html#normal-ecg",
-    "title": "Functional Auto Encoder with R Keras",
-    "section": "Normal ECG",
-    "text": "Normal ECG\n\nCode# Plot a normal ECG.\n\nnormal_train_data |> \n  head(1) |>\n  pivot_longer(-target_varible) |>\n  mutate(name = name |> stringr::str_extract('\\\\d+') |> as.numeric()) |> \n  ggplot(aes(x = name,y = value)) +\n  geom_line() +\n  theme_minimal() +\n  labs(title = 'A Normal ECG',x = NULL,y = NULL)"
-  },
-  {
-    "objectID": "posts/new/autoencoder/index.html#anomalous-ecg",
-    "href": "posts/new/autoencoder/index.html#anomalous-ecg",
-    "title": "Functional Auto Encoder with R Keras",
-    "section": "Anomalous ECG",
-    "text": "Anomalous ECG\n\nCodeanomalous_train_data |> \n  head(1) |>\n  pivot_longer(-target_varible) |>\n  mutate(name = name |> stringr::str_extract('\\\\d+') |> as.numeric()) |> \n  ggplot(aes(x = name,y = value)) +\n  geom_line() +\n  theme_minimal() +\n  labs(title = 'A Anomalous ECG',x = NULL,y = NULL)"
-  },
-  {
-    "objectID": "posts/new/autoencoder/index.html#discover-the-input-and-output-dimensions",
-    "href": "posts/new/autoencoder/index.html#discover-the-input-and-output-dimensions",
-    "title": "Functional Auto Encoder with R Keras",
-    "section": "Discover the input and output dimensions",
-    "text": "Discover the input and output dimensions\n\nCode# dim_features is the dimension of your features\ndim_features <- normal_train_data |> select(-target_varible) |> ncol()\n\n# latent dim is usually the smallest layer of the network at the end of the encoder model\nlatent_dim <- 8"
-  },
-  {
-    "objectID": "posts/new/autoencoder/index.html#define-the-encoder",
-    "href": "posts/new/autoencoder/index.html#define-the-encoder",
-    "title": "Functional Auto Encoder with R Keras",
-    "section": "Define the encoder",
-    "text": "Define the encoder\n\nCode#|warning: false\nencoder_input <- layer_input(shape = c(dim_features), name = \"features\")\n\nLoaded Tensorflow version 2.9.2\n\nCodeencoder_output <- encoder_input |> \n  layer_dense(32,activation = \"relu\") |> \n  layer_dense(16,activation = \"relu\") |>\n  layer_dense(latent_dim,activation = \"relu\")\n\nencoder <- keras_model(encoder_input, encoder_output, name = \"encoder\")\nencoder\n\nModel: \"encoder\"\n________________________________________________________________________________\n Layer (type)                       Output Shape                    Param #     \n================================================================================\n features (InputLayer)              [(None, 140)]                   0           \n dense_2 (Dense)                    (None, 32)                      4512        \n dense_1 (Dense)                    (None, 16)                      528         \n dense (Dense)                      (None, 8)                       136         \n================================================================================\nTotal params: 5,176\nTrainable params: 5,176\nNon-trainable params: 0\n________________________________________________________________________________"
-  },
-  {
-    "objectID": "posts/new/autoencoder/index.html#define-decoder",
-    "href": "posts/new/autoencoder/index.html#define-decoder",
-    "title": "Functional Auto Encoder with R Keras",
-    "section": "Define Decoder",
-    "text": "Define Decoder\n\nCodedecoder_input <- layer_input(shape = c(latent_dim), name = \"latent_dim\")\n\ndecoder_output <- decoder_input |> \n  layer_dense(16,activation = \"relu\") |> \n  layer_dense(32,activation = \"relu\") |>\n  layer_dense(dim_features,activation = \"sigmoid\")\n\ndecoder <- keras_model(decoder_input, decoder_output, name = \"decoder\")\ndecoder\n\nModel: \"decoder\"\n________________________________________________________________________________\n Layer (type)                       Output Shape                    Param #     \n================================================================================\n latent_dim (InputLayer)            [(None, 8)]                     0           \n dense_5 (Dense)                    (None, 16)                      144         \n dense_4 (Dense)                    (None, 32)                      544         \n dense_3 (Dense)                    (None, 140)                     4620        \n================================================================================\nTotal params: 5,308\nTrainable params: 5,308\nNon-trainable params: 0\n________________________________________________________________________________"
-  },
-  {
-    "objectID": "posts/new/autoencoder/index.html#define-the-auto-encoder",
-    "href": "posts/new/autoencoder/index.html#define-the-auto-encoder",
-    "title": "Functional Auto Encoder with R Keras",
-    "section": "Define The Auto Encoder",
-    "text": "Define The Auto Encoder\n\nCodeencoded <- encoder(encoder_input)\ndecoded <- decoder(encoded)\nautoencoder <- keras_model(encoder_input, decoded,\n                           name = \"autoencoder\")\nautoencoder\n\nModel: \"autoencoder\"\n________________________________________________________________________________\n Layer (type)                       Output Shape                    Param #     \n================================================================================\n features (InputLayer)              [(None, 140)]                   0           \n encoder (Functional)               (None, 8)                       5176        \n decoder (Functional)               (None, 140)                     5308        \n================================================================================\nTotal params: 10,484\nTrainable params: 10,484\nNon-trainable params: 0\n________________________________________________________________________________"
-  },
-  {
-    "objectID": "posts/new/autoencoder/index.html#fit-the-model",
-    "href": "posts/new/autoencoder/index.html#fit-the-model",
-    "title": "Functional Auto Encoder with R Keras",
-    "section": "Fit the model",
-    "text": "Fit the model\n\nCodehistory <- autoencoder |>\n  compile(loss = \"mae\",\n          optimizer = \"adam\") |>\n  fit(\n    x = normal_train_data_x,\n    y = normal_train_data_x,\n    epochs = 20,\n    batch_size = 512,\n    validation_data = list(\n      test_data_x,\n      test_data_x\n    ),\n    shuffle = TRUE\n  )\n\n\n\nCodeplot(history)"
-  },
-  {
-    "objectID": "posts/new/autoencoder/index.html#reconstruction-on-normal-data",
-    "href": "posts/new/autoencoder/index.html#reconstruction-on-normal-data",
-    "title": "Functional Auto Encoder with R Keras",
-    "section": "Reconstruction on Normal data",
-    "text": "Reconstruction on Normal data\n\nCodeencoded_data <- encoder |>\n  predict(normal_test_data_x)\n\ndecoded_data <- decoder |> \n  predict(encoded_data)\n\ndecoded_data_to_plot <- decoded_data |> \n  head(1) |>\n  as_tibble() |> \n  pivot_longer(everything(),values_to = 'Reconstruction') |> \n  mutate(name = name |> stringr::str_extract('\\\\d+') |> as.numeric())\n\nWarning: The `x` argument of `as_tibble.matrix()` must have unique column names if `.name_repair` is omitted as of tibble 2.0.0.\nUsing compatibility `.name_repair`.\nThis warning is displayed once every 8 hours.\nCall `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.\n\nCodenormal_test_data_to_plot <- normal_test_data_x |>\n  head(1) |>\n  as_tibble() |> \n  pivot_longer(everything(),values_to = 'Input')|> \n  mutate(name = name |> stringr::str_extract('\\\\d+')|> as.numeric())\n\ndata_to_plot <- decoded_data_to_plot |> \n  left_join(normal_test_data_to_plot,by = 'name')\n\n\ndata_to_plot |>\n  pivot_longer(cols = -name,names_to = 'source') |> \n  ggplot(aes(x = name,y = value,colour = source,group = source)) + \n  geom_line() +\n  theme_minimal() +\n  labs(title = 'Recontruction on test data',x = NULL,y=NULL)"
-  },
-  {
-    "objectID": "posts/new/autoencoder/index.html#reconstruction-on-anomalous-data",
-    "href": "posts/new/autoencoder/index.html#reconstruction-on-anomalous-data",
-    "title": "Functional Auto Encoder with R Keras",
-    "section": "Reconstruction on Anomalous data",
-    "text": "Reconstruction on Anomalous data\nIt is clear that the reconstruction can’t quite create the output, this is what we will exploit to define outliers.\n\nCodeencoded_data <- encoder |>\n  predict(anomalous_test_data_x)\n\ndecoded_data <- decoder |> \n  predict(encoded_data)\n\ndecoded_data_to_plot <- decoded_data |> \n  head(1) |>\n  as_tibble() |> \n  pivot_longer(everything(),values_to = 'Reconstruction') |> \n  mutate(name = name |> stringr::str_extract('\\\\d+') |> as.numeric())\n\nnormal_test_data_to_plot <- anomalous_test_data_x |>\n  head(1) |>\n  as_tibble() |> \n  pivot_longer(everything(),values_to = 'Input')|> \n  mutate(name = name |> stringr::str_extract('\\\\d+')|> as.numeric())\n\ndata_to_plot <- decoded_data_to_plot |> \n  left_join(normal_test_data_to_plot,by = 'name')\n\n\ndata_to_plot |>\n  pivot_longer(cols = -name,names_to = 'source') |> \n  ggplot(aes(x = name,y = value,colour = source,group = source)) + \n  geom_line() +\n  theme_minimal() +\n  labs(title = 'Recontruction on Anomalous test data',x = NULL,y=NULL)"
-  },
-  {
-    "objectID": "posts/new/autoencoder/index.html#discover-the-threshold-to-flag-annomalies",
-    "href": "posts/new/autoencoder/index.html#discover-the-threshold-to-flag-annomalies",
-    "title": "Functional Auto Encoder with R Keras",
-    "section": "Discover the threshold to flag annomalies",
-    "text": "Discover the threshold to flag annomalies\n\nCodereconstructions <-  autoencoder |> predict(normal_train_data_x) |> as_tibble()\ntrain_data_tibble <- normal_train_data_x |> as_tibble()\n\n\ntrain_loss = loss_mean_squared_error(reconstructions, train_data_tibble)\n\ndata_loss <- train_loss |> as.numeric() |> as_tibble()\n\ndata_loss |> \n  ggplot(aes(x = value)) +\n  geom_histogram(bins = 50) +\n  labs(title = 'Loss Normal Train Data',x = 'Train Loss', y = 'No of examples') +\n  theme_minimal()\n\n\n\n\n\nCodethreshold <-mean(train_loss) + sd(train_loss)\n\nprint(threshold |> as.numeric())\n\n[1] 0.01252376\n\n\n\n\n\n\n\n\nCompletness\n\n\n\nThere are other strategies you could use to select a threshold value above which test examples should be classified as anomalous, the correct approach will depend on your dataset. You can learn more with the links at the end of this tutorial.\n\n\n\n\n\n\n\n\nStrategy\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nIf you examine the reconstruction error for the anomalous examples in the test set, you’ll notice most have greater reconstruction error than the threshold. By varing the threshold, you can adjust the precision and recall of your classifier.\n\n\n\n\n\n\n\n\n\n\ntidy.outliers\n\n\n\nIf you need something faster, and usually more practical do check out my package tidy.outliers for easy to use outlier detection methods.\n\n\n\nCodereconstructions <-  autoencoder |> predict(anomalous_test_data_x) |> as_tibble()\n\nanomalous_test_data_x_tibble <- anomalous_test_data_x |> as_tibble()\n\ntest_loss = loss_mean_squared_error(reconstructions, anomalous_test_data_x_tibble)\n\ndata_loss <- test_loss |> as.numeric() |> as_tibble()\n\ndata_loss |> \n  ggplot(aes(x = value)) +\n  geom_histogram(bins = 50) +\n  labs(title = 'Loss Anomalous Test Data',x = 'Test Loss', y = 'No of examples') +\n  theme_minimal()"
-  },
-  {
-    "objectID": "posts/new/autoencoder/index.html#classify-anomalies",
-    "href": "posts/new/autoencoder/index.html#classify-anomalies",
-    "title": "Functional Auto Encoder with R Keras",
-    "section": "Classify anomalies",
-    "text": "Classify anomalies\n\nCodepredict_outlier <- function(model,data,threshold){\n  reconstructions <-  model |> predict(data)\n  loss <-  loss_mean_squared_error(reconstructions, data)\n  df_result <- k_less(loss,threshold) |>\n    as.numeric() |> \n    as.factor() |> \n    as_tibble() |> \n    rename(estimate = value)\n  return(df_result)\n}\n\npreds <- predict_outlier(autoencoder,anomalous_test_data_x,threshold)\ntest_data <- anomalous_test_data |>\n  select(target_varible) |> \n  rename(truth = target_varible) |> \n  mutate(truth = truth |> factor(levels = c(0,1)))\n\ndf_result <- test_data |> \n  bind_cols(preds)\n\ndf_result |> \n  yardstick::accuracy(truth = truth,estimate = estimate)\n\n\n\n  \n\n\nCodedf_result |> \n  yardstick::precision(truth = truth,estimate = estimate)\n\n\n\n  \n\n\nCodedf_result |> \n  yardstick::recall(truth = truth,estimate = estimate)"
-  },
-  {
-    "objectID": "posts/old/post-with-code/index.html",
-    "href": "posts/old/post-with-code/index.html",
-    "title": "Post With Code",
-    "section": "",
-    "text": "1 + 1\n\n[1] 2"
-  },
-  {
-    "objectID": "posts/old/welcome/index.html",
-    "href": "posts/old/welcome/index.html",
-    "title": "Welcome To My Blog",
-    "section": "",
-    "text": "Since this post doesn’t specify an explicit image, the first image in the post will be used in the listing page of posts."
-  },
-  {
     "objectID": "posts/old/index.html",
     "href": "posts/old/index.html",
     "title": "tidy.outliers",
@@ -172,76 +32,132 @@
     "href": "posts/new/pandas_tidyverse/index.html",
     "title": "Pandas vs R after 6 years",
     "section": "",
-    "text": "Codelibrary(tidyverse)\n\n\n\n\n\n\nCodeimport pandas as pd\nimport numpy as np"
+    "text": "Importing Packages\n\n\nCodelibrary(tidyverse)\n\n\n\n\n\n\nCodeimport pandas as pd\nimport numpy as np"
   },
   {
-    "objectID": "posts/new/pandas_tidyverse/index.html#listing-the-variables",
-    "href": "posts/new/pandas_tidyverse/index.html#listing-the-variables",
-    "title": "Pandas vs R after 6 years",
-    "section": "Listing the variables",
-    "text": "Listing the variables\n\n\n\nCodelibrary(tidyverse)\n\n\n\n\n\n\nCodeimport pandas as pd\nimport numpy as np"
+    "objectID": "blog.html",
+    "href": "blog.html",
+    "title": "Blog",
+    "section": "",
+    "text": "Order By\n       Default\n         \n          Title\n        \n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\n\n\nPandas vs R after 6 years\n\n\n\n\n\n\ntidyverse\n\n\npandas\n\n\ncode\n\n\n\n\n\n\nAug 31, 2024\n\n\n1 min\n\n\n\n\n\n\n\n\n\n\n\n\nFunctional Auto Encoder with R Keras\n\n\n\n\n\n\ntidymodels\n\n\ntensorflow\n\n\ncode\n\n\n\n\n\n\nMar 31, 2023\n\n\n6 min\n\n\n\n\n\n\n\n\n\n\n\n\ntidy.outliers\n\n\n\n\n\n\ntidymodels\n\n\ncode\n\n\npackage\n\n\n\n\n\n\nJan 31, 2023\n\n\n2 min\n\n\n\n\n\n\nNo matching items"
   },
   {
-    "objectID": "posts/new/pandas_tidyverse/index.html#listing-the-variables-1",
-    "href": "posts/new/pandas_tidyverse/index.html#listing-the-variables-1",
-    "title": "Pandas vs R after 6 years",
-    "section": "Listing the variables",
-    "text": "Listing the variables\n\n\n\nCodelibrary(tidyverse)\n\n\n\n\n\n\nCodeimport pandas as pd\nimport numpy as np"
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About Me",
+    "section": "",
+    "text": "Hi - I’m Bruno Testaguzza Carlin. I currently wort at Recovery as a Data Science Specialist.\nThis is my fourth personal website/blog which contains discussions on topics related to Data Science.\nI think quarto will be the stable home of my site wish me luck.\nPlease browse around, and feel free to leave a comment."
   },
   {
-    "objectID": "posts/new/pandas_tidyverse/index.html#listing-the-variables-2",
-    "href": "posts/new/pandas_tidyverse/index.html#listing-the-variables-2",
-    "title": "Pandas vs R after 6 years",
-    "section": "Listing the variables",
-    "text": "Listing the variables\n\n\n\nCodelibrary(tidyverse)\n\n\n\n\n\n\nCodeimport pandas as pd\nimport numpy as np"
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Welcome to my site",
+    "section": "",
+    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites\nFeel free to ask any question on the comments or on any of my social media links."
   },
   {
-    "objectID": "posts/new/pandas_tidyverse/index.html#listing-the-variables-3",
-    "href": "posts/new/pandas_tidyverse/index.html#listing-the-variables-3",
-    "title": "Pandas vs R after 6 years",
-    "section": "Listing the variables",
-    "text": "Listing the variables\n\n\n\nCodelibrary(tidyverse)\n\n\n\n\n\n\nCodeimport pandas as pd\nimport numpy as np"
+    "objectID": "posts/new/autoencoder/index.html",
+    "href": "posts/new/autoencoder/index.html",
+    "title": "Functional Auto Encoder with R Keras",
+    "section": "",
+    "text": "This is a somewhat simple post trying to mimic the guides on auto encoders present in Third example: Anomaly detection"
   },
   {
-    "objectID": "posts/new/pandas_tidyverse/index.html#listing-the-variables-4",
-    "href": "posts/new/pandas_tidyverse/index.html#listing-the-variables-4",
-    "title": "Pandas vs R after 6 years",
-    "section": "Listing the variables",
-    "text": "Listing the variables\n\n\n\nCodelibrary(tidyverse)\n\n\n\n\n\n\nCodeimport pandas as pd\nimport numpy as np"
+    "objectID": "posts/new/autoencoder/index.html#split-the-data",
+    "href": "posts/new/autoencoder/index.html#split-the-data",
+    "title": "Functional Auto Encoder with R Keras",
+    "section": "Split the data",
+    "text": "Split the data\n\nCodeset.seed(20)\n\nraw_data_split &lt;- initial_split(raw_data,prop = .8)\n\ntrain_data &lt;- training(raw_data_split)\n\ntest_data &lt;- testing(raw_data_split)"
   },
   {
-    "objectID": "posts/new/pandas_tidyverse/index.html#listing-the-variables-5",
-    "href": "posts/new/pandas_tidyverse/index.html#listing-the-variables-5",
-    "title": "Pandas vs R after 6 years",
-    "section": "Listing the variables",
-    "text": "Listing the variables\n\n\n\nCodelibrary(tidyverse)\n\n\n\n\n\n\nCodeimport pandas as pd\nimport numpy as np"
+    "objectID": "posts/new/autoencoder/index.html#normalize-the-data-to-01.",
+    "href": "posts/new/autoencoder/index.html#normalize-the-data-to-01.",
+    "title": "Functional Auto Encoder with R Keras",
+    "section": "Normalize the data to [0,1].",
+    "text": "Normalize the data to [0,1].\n\nCodetarget_varible &lt;- raw_data[,ncol(raw_data)] |&gt; names()\n\nrecipe_data &lt;- recipe(train_data) |&gt; \n  update_role(target_varible,new_role = 'outcome') |&gt; \n  update_role(-target_varible,new_role = 'predictor') |&gt; \n  step_range(all_predictors(),min = 0,max = 1)\n\nWarning: Using an external vector in selections was deprecated in tidyselect 1.1.0.\nℹ Please use `all_of()` or `any_of()` instead.\n  # Was:\n  data %&gt;% select(target_varible)\n\n  # Now:\n  data %&gt;% select(all_of(target_varible))\n\nSee &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.\n\nCodepreped_recipe_data &lt;- recipe_data |&gt; prep(train_data)\n\nbaked_train_data &lt;- preped_recipe_data |&gt; bake(new_data = NULL)\nbaked_test_data &lt;- preped_recipe_data |&gt; bake(test_data)"
   },
   {
-    "objectID": "posts/new/pandas_tidyverse/index.html#listing-the-variables-6",
-    "href": "posts/new/pandas_tidyverse/index.html#listing-the-variables-6",
-    "title": "Pandas vs R after 6 years",
-    "section": "Listing the variables",
-    "text": "Listing the variables\n\n\n\nCodelibrary(tidyverse)\n\n\n\n\n\n\nCodeimport pandas as pd\nimport numpy as np"
+    "objectID": "posts/new/autoencoder/index.html#separate-datasets-for-future-usage",
+    "href": "posts/new/autoencoder/index.html#separate-datasets-for-future-usage",
+    "title": "Functional Auto Encoder with R Keras",
+    "section": "Separate datasets for future usage",
+    "text": "Separate datasets for future usage\nYou will train the autoencoder using only the normal rhythms\nWhich are labeled in this dataset as 1.\nSeparate the normal rhythms from the abnormal rhythms.\n\nCodenormal_train_data &lt;-  baked_train_data |&gt; filter(get(target_varible) == 1)\nnormal_test_data &lt;-  baked_test_data |&gt; filter(get(target_varible) == 1)\n\nanomalous_train_data &lt;-  baked_train_data |&gt; filter(get(target_varible) == 0)\nanomalous_test_data &lt;-  baked_test_data |&gt; filter(get(target_varible) == 0)"
   },
   {
-    "objectID": "posts/new/pandas_tidyverse/index.html#listing-the-variables-7",
-    "href": "posts/new/pandas_tidyverse/index.html#listing-the-variables-7",
-    "title": "Pandas vs R after 6 years",
-    "section": "Listing the variables",
-    "text": "Listing the variables\n\n\n\nCodelibrary(tidyverse)\n\n\n\n\n\n\nCodeimport pandas as pd\nimport numpy as np"
+    "objectID": "posts/new/autoencoder/index.html#normal-ecg",
+    "href": "posts/new/autoencoder/index.html#normal-ecg",
+    "title": "Functional Auto Encoder with R Keras",
+    "section": "Normal ECG",
+    "text": "Normal ECG\n\nCode# Plot a normal ECG.\n\nnormal_train_data |&gt; \n  head(1) |&gt;\n  pivot_longer(-target_varible) |&gt;\n  mutate(name = name |&gt; stringr::str_extract('\\\\d+') |&gt; as.numeric()) |&gt; \n  ggplot(aes(x = name,y = value)) +\n  geom_line() +\n  theme_minimal() +\n  labs(title = 'A Normal ECG',x = NULL,y = NULL)"
   },
   {
-    "objectID": "posts/new/pandas_tidyverse/index.html#listing-the-variables-8",
-    "href": "posts/new/pandas_tidyverse/index.html#listing-the-variables-8",
-    "title": "Pandas vs R after 6 years",
-    "section": "Listing the variables",
-    "text": "Listing the variables\n\n\n\nCodelibrary(tidyverse)\n\n\n\n\n\n\nCodeimport pandas as pd\nimport numpy as np"
+    "objectID": "posts/new/autoencoder/index.html#anomalous-ecg",
+    "href": "posts/new/autoencoder/index.html#anomalous-ecg",
+    "title": "Functional Auto Encoder with R Keras",
+    "section": "Anomalous ECG",
+    "text": "Anomalous ECG\n\nCodeanomalous_train_data |&gt; \n  head(1) |&gt;\n  pivot_longer(-target_varible) |&gt;\n  mutate(name = name |&gt; stringr::str_extract('\\\\d+') |&gt; as.numeric()) |&gt; \n  ggplot(aes(x = name,y = value)) +\n  geom_line() +\n  theme_minimal() +\n  labs(title = 'A Anomalous ECG',x = NULL,y = NULL)"
   },
   {
-    "objectID": "posts/new/pandas_tidyverse/index.html#listing-the-variables-9",
-    "href": "posts/new/pandas_tidyverse/index.html#listing-the-variables-9",
-    "title": "Pandas vs R after 6 years",
-    "section": "Listing the variables",
-    "text": "Listing the variables\n\n\n\nCodelibrary(tidyverse)\n\n\n\n\n\n\nCodeimport pandas as pd\nimport numpy as np"
+    "objectID": "posts/new/autoencoder/index.html#discover-the-input-and-output-dimensions",
+    "href": "posts/new/autoencoder/index.html#discover-the-input-and-output-dimensions",
+    "title": "Functional Auto Encoder with R Keras",
+    "section": "Discover the input and output dimensions",
+    "text": "Discover the input and output dimensions\n\nCode# dim_features is the dimension of your features\ndim_features &lt;- normal_train_data |&gt; select(-target_varible) |&gt; ncol()\n\n# latent dim is usually the smallest layer of the network at the end of the encoder model\nlatent_dim &lt;- 8"
+  },
+  {
+    "objectID": "posts/new/autoencoder/index.html#define-the-encoder",
+    "href": "posts/new/autoencoder/index.html#define-the-encoder",
+    "title": "Functional Auto Encoder with R Keras",
+    "section": "Define the encoder",
+    "text": "Define the encoder\n\nCodeimport sys\nsys.executable\n\n'/home/carlin/.virtualenvs/py399/bin/python'\n\n\n\nCode#|warning: false\nencoder_input &lt;- layer_input(shape = c(dim_features), name = \"features\")\n\nencoder_output &lt;- encoder_input |&gt; \n  layer_dense(32,activation = \"relu\") |&gt; \n  layer_dense(16,activation = \"relu\") |&gt;\n  layer_dense(latent_dim,activation = \"relu\")\n\nencoder &lt;- keras_model(encoder_input, encoder_output, name = \"encoder\")\nencoder\n\nModel: \"encoder\"\n┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┓\n┃ Layer (type)                      ┃ Output Shape             ┃       Param # ┃\n┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━┩\n│ features (InputLayer)             │ (None, 140)              │             0 │\n├───────────────────────────────────┼──────────────────────────┼───────────────┤\n│ dense (Dense)                     │ (None, 32)               │         4,512 │\n├───────────────────────────────────┼──────────────────────────┼───────────────┤\n│ dense_1 (Dense)                   │ (None, 16)               │           528 │\n├───────────────────────────────────┼──────────────────────────┼───────────────┤\n│ dense_2 (Dense)                   │ (None, 8)                │           136 │\n└───────────────────────────────────┴──────────────────────────┴───────────────┘\n Total params: 5,176 (20.22 KB)\n Trainable params: 5,176 (20.22 KB)\n Non-trainable params: 0 (0.00 B)"
+  },
+  {
+    "objectID": "posts/new/autoencoder/index.html#define-decoder",
+    "href": "posts/new/autoencoder/index.html#define-decoder",
+    "title": "Functional Auto Encoder with R Keras",
+    "section": "Define Decoder",
+    "text": "Define Decoder\n\nCodedecoder_input &lt;- layer_input(shape = c(latent_dim), name = \"latent_dim\")\n\ndecoder_output &lt;- decoder_input |&gt; \n  layer_dense(16,activation = \"relu\") |&gt; \n  layer_dense(32,activation = \"relu\") |&gt;\n  layer_dense(dim_features,activation = \"sigmoid\")\n\ndecoder &lt;- keras_model(decoder_input, decoder_output, name = \"decoder\")\ndecoder\n\nModel: \"decoder\"\n┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┓\n┃ Layer (type)                      ┃ Output Shape             ┃       Param # ┃\n┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━┩\n│ latent_dim (InputLayer)           │ (None, 8)                │             0 │\n├───────────────────────────────────┼──────────────────────────┼───────────────┤\n│ dense_3 (Dense)                   │ (None, 16)               │           144 │\n├───────────────────────────────────┼──────────────────────────┼───────────────┤\n│ dense_4 (Dense)                   │ (None, 32)               │           544 │\n├───────────────────────────────────┼──────────────────────────┼───────────────┤\n│ dense_5 (Dense)                   │ (None, 140)              │         4,620 │\n└───────────────────────────────────┴──────────────────────────┴───────────────┘\n Total params: 5,308 (20.73 KB)\n Trainable params: 5,308 (20.73 KB)\n Non-trainable params: 0 (0.00 B)"
+  },
+  {
+    "objectID": "posts/new/autoencoder/index.html#define-the-auto-encoder",
+    "href": "posts/new/autoencoder/index.html#define-the-auto-encoder",
+    "title": "Functional Auto Encoder with R Keras",
+    "section": "Define The Auto Encoder",
+    "text": "Define The Auto Encoder\n\nCodeencoded &lt;- encoder(encoder_input)\ndecoded &lt;- decoder(encoded)\nautoencoder &lt;- keras_model(encoder_input, decoded,\n                           name = \"autoencoder\")\nautoencoder\n\nModel: \"autoencoder\"\n┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┓\n┃ Layer (type)                      ┃ Output Shape             ┃       Param # ┃\n┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━┩\n│ features (InputLayer)             │ (None, 140)              │             0 │\n├───────────────────────────────────┼──────────────────────────┼───────────────┤\n│ encoder (Functional)              │ (None, 8)                │         5,176 │\n├───────────────────────────────────┼──────────────────────────┼───────────────┤\n│ decoder (Functional)              │ (None, 140)              │         5,308 │\n└───────────────────────────────────┴──────────────────────────┴───────────────┘\n Total params: 10,484 (40.95 KB)\n Trainable params: 10,484 (40.95 KB)\n Non-trainable params: 0 (0.00 B)"
+  },
+  {
+    "objectID": "posts/new/autoencoder/index.html#fit-the-model",
+    "href": "posts/new/autoencoder/index.html#fit-the-model",
+    "title": "Functional Auto Encoder with R Keras",
+    "section": "Fit the model",
+    "text": "Fit the model\n\nCodehistory &lt;- autoencoder |&gt;\n  compile(loss = \"mae\",\n          optimizer = \"adam\") |&gt;\n  fit(\n    x = normal_train_data_x,\n    y = normal_train_data_x,\n    epochs = 20,\n    batch_size = 512,\n    validation_data = list(\n      test_data_x,\n      test_data_x\n    ),\n    shuffle = TRUE\n  )\n\nEpoch 1/20\n5/5 - 1s - 187ms/step - loss: 0.1349 - val_loss: 0.1405\nEpoch 2/20\n5/5 - 0s - 8ms/step - loss: 0.1308 - val_loss: 0.1346\nEpoch 3/20\n5/5 - 0s - 8ms/step - loss: 0.1234 - val_loss: 0.1252\nEpoch 4/20\n5/5 - 0s - 8ms/step - loss: 0.1132 - val_loss: 0.1158\nEpoch 5/20\n5/5 - 0s - 8ms/step - loss: 0.1036 - val_loss: 0.1086\nEpoch 6/20\n5/5 - 0s - 8ms/step - loss: 0.0942 - val_loss: 0.1005\nEpoch 7/20\n5/5 - 0s - 8ms/step - loss: 0.0844 - val_loss: 0.0936\nEpoch 8/20\n5/5 - 0s - 8ms/step - loss: 0.0759 - val_loss: 0.0877\nEpoch 9/20\n5/5 - 0s - 8ms/step - loss: 0.0686 - val_loss: 0.0833\nEpoch 10/20\n5/5 - 0s - 8ms/step - loss: 0.0627 - val_loss: 0.0799\nEpoch 11/20\n5/5 - 0s - 7ms/step - loss: 0.0582 - val_loss: 0.0778\nEpoch 12/20\n5/5 - 0s - 8ms/step - loss: 0.0551 - val_loss: 0.0765\nEpoch 13/20\n5/5 - 0s - 8ms/step - loss: 0.0531 - val_loss: 0.0757\nEpoch 14/20\n5/5 - 0s - 8ms/step - loss: 0.0516 - val_loss: 0.0752\nEpoch 15/20\n5/5 - 0s - 8ms/step - loss: 0.0503 - val_loss: 0.0746\nEpoch 16/20\n5/5 - 0s - 8ms/step - loss: 0.0494 - val_loss: 0.0745\nEpoch 17/20\n5/5 - 0s - 8ms/step - loss: 0.0486 - val_loss: 0.0742\nEpoch 18/20\n5/5 - 0s - 8ms/step - loss: 0.0480 - val_loss: 0.0741\nEpoch 19/20\n5/5 - 0s - 7ms/step - loss: 0.0475 - val_loss: 0.0740\nEpoch 20/20\n5/5 - 0s - 7ms/step - loss: 0.0471 - val_loss: 0.0739\n\n\n\nCodeplot(history)"
+  },
+  {
+    "objectID": "posts/new/autoencoder/index.html#reconstruction-on-normal-data",
+    "href": "posts/new/autoencoder/index.html#reconstruction-on-normal-data",
+    "title": "Functional Auto Encoder with R Keras",
+    "section": "Reconstruction on Normal data",
+    "text": "Reconstruction on Normal data\n\nCodeencoded_data &lt;- encoder |&gt;\n  predict(normal_test_data_x)\n\n19/19 - 0s - 3ms/step\n\nCodedecoded_data &lt;- decoder |&gt; \n  predict(encoded_data)\n\n19/19 - 0s - 3ms/step\n\nCodedecoded_data_to_plot &lt;- decoded_data |&gt; \n  head(1) |&gt;\n  as_tibble() |&gt; \n  pivot_longer(everything(),values_to = 'Reconstruction') |&gt; \n  mutate(name = name |&gt; stringr::str_extract('\\\\d+') |&gt; as.numeric())\n\nWarning: The `x` argument of `as_tibble.matrix()` must have unique column names if\n`.name_repair` is omitted as of tibble 2.0.0.\nℹ Using compatibility `.name_repair`.\n\nCodenormal_test_data_to_plot &lt;- normal_test_data_x |&gt;\n  head(1) |&gt;\n  as_tibble() |&gt; \n  pivot_longer(everything(),values_to = 'Input')|&gt; \n  mutate(name = name |&gt; stringr::str_extract('\\\\d+')|&gt; as.numeric())\n\ndata_to_plot &lt;- decoded_data_to_plot |&gt; \n  left_join(normal_test_data_to_plot,by = 'name')\n\n\ndata_to_plot |&gt;\n  pivot_longer(cols = -name,names_to = 'source') |&gt; \n  ggplot(aes(x = name,y = value,colour = source,group = source)) + \n  geom_line() +\n  theme_minimal() +\n  labs(title = 'Recontruction on test data',x = NULL,y=NULL)"
+  },
+  {
+    "objectID": "posts/new/autoencoder/index.html#reconstruction-on-anomalous-data",
+    "href": "posts/new/autoencoder/index.html#reconstruction-on-anomalous-data",
+    "title": "Functional Auto Encoder with R Keras",
+    "section": "Reconstruction on Anomalous data",
+    "text": "Reconstruction on Anomalous data\nIt is clear that the reconstruction can’t quite create the output, this is what we will exploit to define outliers.\n\nCodeencoded_data &lt;- encoder |&gt;\n  predict(anomalous_test_data_x)\n\n14/14 - 0s - 2ms/step\n\nCodedecoded_data &lt;- decoder |&gt; \n  predict(encoded_data)\n\n14/14 - 0s - 1ms/step\n\nCodedecoded_data_to_plot &lt;- decoded_data |&gt; \n  head(1) |&gt;\n  as_tibble() |&gt; \n  pivot_longer(everything(),values_to = 'Reconstruction') |&gt; \n  mutate(name = name |&gt; stringr::str_extract('\\\\d+') |&gt; as.numeric())\n\nnormal_test_data_to_plot &lt;- anomalous_test_data_x |&gt;\n  head(1) |&gt;\n  as_tibble() |&gt; \n  pivot_longer(everything(),values_to = 'Input')|&gt; \n  mutate(name = name |&gt; stringr::str_extract('\\\\d+')|&gt; as.numeric())\n\ndata_to_plot &lt;- decoded_data_to_plot |&gt; \n  left_join(normal_test_data_to_plot,by = 'name')\n\n\ndata_to_plot |&gt;\n  pivot_longer(cols = -name,names_to = 'source') |&gt; \n  ggplot(aes(x = name,y = value,colour = source,group = source)) + \n  geom_line() +\n  theme_minimal() +\n  labs(title = 'Recontruction on Anomalous test data',x = NULL,y=NULL)"
+  },
+  {
+    "objectID": "posts/new/autoencoder/index.html#discover-the-threshold-to-flag-annomalies",
+    "href": "posts/new/autoencoder/index.html#discover-the-threshold-to-flag-annomalies",
+    "title": "Functional Auto Encoder with R Keras",
+    "section": "Discover the threshold to flag annomalies",
+    "text": "Discover the threshold to flag annomalies\n\nCodereconstructions &lt;-  autoencoder |&gt; predict(normal_train_data_x) |&gt; as_tibble()\n\n73/73 - 0s - 1ms/step\n\nCodetrain_data_tibble &lt;- normal_train_data_x |&gt; as_tibble()\n\n\ntrain_loss = loss_mean_squared_error(as.matrix(reconstructions), as.matrix(train_data_tibble))\n\ndata_loss &lt;- train_loss |&gt; as.numeric() |&gt; as_tibble()\n\ndata_loss |&gt; \n  ggplot(aes(x = value)) +\n  geom_histogram(bins = 50) +\n  labs(title = 'Loss Normal Train Data',x = 'Train Loss', y = 'No of examples') +\n  theme_minimal()\n\n\n\n\n\n\n\n\nCodethreshold &lt;-mean(train_loss) + sd(train_loss)\n\nprint(threshold |&gt; as.numeric())\n\n[1] 0.01256173\n\n\n\n\n\n\n\n\nCompletness\n\n\n\nThere are other strategies you could use to select a threshold value above which test examples should be classified as anomalous, the correct approach will depend on your dataset. You can learn more with the links at the end of this tutorial.\n\n\n\n\n\n\n\n\nStrategy\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nIf you examine the reconstruction error for the anomalous examples in the test set, you’ll notice most have greater reconstruction error than the threshold. By varing the threshold, you can adjust the precision and recall of your classifier.\n\n\n\n\n\n\n\n\n\n\ntidy.outliers\n\n\n\nIf you need something faster, and usually more practical do check out my package tidy.outliers for easy to use outlier detection methods.\n\n\n\nCodereconstructions &lt;-  autoencoder |&gt; predict(anomalous_test_data_x) |&gt; as_tibble()\n\n14/14 - 0s - 4ms/step\n\nCodeanomalous_test_data_x_tibble &lt;- anomalous_test_data_x |&gt; as_tibble()\n\ntest_loss = loss_mean_squared_error(as.matrix(reconstructions), as.matrix(anomalous_test_data_x_tibble))\n\ndata_loss &lt;- test_loss |&gt; as.numeric() |&gt; as_tibble()\n\ndata_loss |&gt; \n  ggplot(aes(x = value)) +\n  geom_histogram(bins = 50) +\n  labs(title = 'Loss Anomalous Test Data',x = 'Test Loss', y = 'No of examples') +\n  theme_minimal()"
+  },
+  {
+    "objectID": "posts/new/autoencoder/index.html#classify-anomalies",
+    "href": "posts/new/autoencoder/index.html#classify-anomalies",
+    "title": "Functional Auto Encoder with R Keras",
+    "section": "Classify anomalies",
+    "text": "Classify anomalies\n\nCodepredict_outlier &lt;- function(model,data,threshold){\n  reconstructions &lt;-  model |&gt; predict(data)\n  loss &lt;-  loss_mean_squared_error(reconstructions, data)\n  df_result &lt;- keras::k_less(loss,threshold) |&gt;\n    as.numeric() |&gt; \n    as.factor() |&gt; \n    as_tibble() |&gt; \n    rename(estimate = value)\n  return(df_result)\n}\n\npreds &lt;- predict_outlier(autoencoder,anomalous_test_data_x,threshold)\n\n14/14 - 0s - 2ms/step\n\n\nRegistered S3 methods overwritten by 'keras':\n  method                               from  \n  as.data.frame.keras_training_history keras3\n  plot.keras_training_history          keras3\n  print.keras_training_history         keras3\n  r_to_py.R6ClassGenerator             keras3\n\nCodetest_data &lt;- anomalous_test_data |&gt;\n  select(target_varible) |&gt; \n  rename(truth = target_varible) |&gt; \n  mutate(truth = truth |&gt; factor(levels = c(0,1)))\n\ndf_result &lt;- test_data |&gt; \n  bind_cols(preds)\n\ndf_result |&gt; \n  yardstick::accuracy(truth = truth,estimate = estimate)\n\n\n  \n\n\nCodedf_result |&gt; \n  yardstick::precision(truth = truth,estimate = estimate)\n\n\n  \n\n\nCodedf_result |&gt; \n  yardstick::recall(truth = truth,estimate = estimate)"
   }
 ]
